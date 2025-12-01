@@ -1,0 +1,9 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block branding %}
+  <a href="{% url 'admin:index' %}" class="brand-link" style="display: flex; align-items: center;">
+    <img src="{% static 'static/img/logoo.png' %}" alt="Devi's Gym Logo" style="height:40px; margin-right:10px;">
+    <span style="font-size: 1.5rem; font-weight: bold; color: #fff;">Devi's Gym System</span>
+  </a>
+{% endblock %} 

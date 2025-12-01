@@ -1,0 +1,198 @@
+{% extends 'appointments/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    position: relative;
+    min-height: 100vh;
+}
+
+.main-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 100px;
+}
+
+/* Workout Log Container */
+.workout-log-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: 600;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: translateY(-2px);
+}
+
+/* Exercise Section */
+.exercise-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.exercise-section h5 {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Notes Section */
+.notes-section {
+    margin-bottom: 30px;
+}
+
+.notes-section textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+}
+</style>
+
+<div class="main-wrapper">
+    <div class="container">
+        <div class="workout-log-container">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Log Your Workout</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="mb-4">Logging workout for today's appointment at {{ appointment.time_slot.start_time|time:"H:i" }} - {{ appointment.time_slot.end_time|time:"H:i" }}</h5>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="notes-section">
+                            <div class="form-group">
+                                <label for="id_notes">Workout Notes</label>
+                                <textarea class="form-control" id="id_notes" name="notes" rows="4" placeholder="How was your workout today?"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="exercise-section">
+                            <h5>Exercise Details</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_exercise">Exercise</label>
+                                        <select class="form-control" id="id_exercise" name="exercise">
+                                            <option value="">Select Exercise</option>
+                                            <option value="bench_press">Bench Press</option>
+                                            <option value="squats">Squats</option>
+                                            <option value="deadlift">Deadlift</option>
+                                            <option value="shoulder_press">Shoulder Press</option>
+                                            <option value="pull_ups">Pull-ups</option>
+                                            <option value="dumbbell_curls">Dumbbell Curls</option>
+                                            <option value="leg_press">Leg Press</option>
+                                            <option value="lat_pulldown">Lat Pulldown</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_sets">Sets</label>
+                                        <input type="number" class="form-control" id="id_sets" name="sets" min="1" max="20">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_reps">Reps</label>
+                                        <input type="number" class="form-control" id="id_reps" name="reps" min="1" max="50">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_weight">Weight (kg)</label>
+                                        <input type="number" class="form-control" id="id_weight" name="weight" min="0" step="0.5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Save Workout</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

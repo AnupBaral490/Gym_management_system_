@@ -1,0 +1,407 @@
+{% extends 'appointments/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* Section Title */
+h2 {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: scale(1.05);
+}
+
+/* Card Styling */
+.card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: 600;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Weight & Fat Change */
+.card-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Table Styling */
+.table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #007bff;
+    color: white;
+    text-transform: uppercase;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+    transition: 0.3s ease-in-out;
+}
+
+/* Alert Box */
+.alert-info {
+    background: #e9f5ff;
+    color: #007bff;
+    border-left: 5px solid #007bff;
+    font-weight: 500;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+/* Progress History Container */
+.progress-history-container {
+    margin-top: 100px;
+}
+
+/* Progress Summary Cards */
+.progress-summary {
+    margin-bottom: 30px;
+}
+
+.progress-summary .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.progress-summary .card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.progress-summary .card-title {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.progress-summary .card-text {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+</style>
+
+<div class="container progress-history-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Progress History</h2>
+        <a href="{% url 'track_progress' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Track New Progress
+        </a>
+    </div>
+    
+    {% if progress_entries %}
+        <!-- Progress Summary -->
+        <div class="row progress-summary">
+            {% if weight_change is not None %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Weight Change</h5>
+                        <p class="card-text {% if weight_change < 0 %}text-success{% elif weight_change > 0 %}text-danger{% endif %}">
+                            {{ weight_change|floatformat:1 }} kg
+                            {% if weight_change < 0 %}
+                                <i class="fas fa-arrow-down"></i>
+                            {% elif weight_change > 0 %}
+                                <i class="fas fa-arrow-up"></i>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if fat_change is not None %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Body Fat Change</h5>
+                        <p class="card-text {% if fat_change < 0 %}text-success{% elif fat_change > 0 %}text-danger{% endif %}">
+                            {{ fat_change|floatformat:1 }}%
+                            {% if fat_change < 0 %}
+                                <i class="fas fa-arrow-down"></i>
+                            {% elif fat_change > 0 %}
+                                <i class="fas fa-arrow-up"></i>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Progress Charts -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Weight Progress</h5>
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas id="weightChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Body Fat Progress</h5>
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas id="fatChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Measurements Chart -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Body Measurements Progress</h5>
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas id="measurementsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Log -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Progress Log</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Weight</th>
+                                <th>Body Fat</th>
+                                <th>Measurements</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in progress_entries %}
+                            <tr>
+                                <td>{{ entry.date|date:"M d, Y" }}</td>
+                                <td>{{ entry.weight }} kg</td>
+                                <td>{{ entry.body_fat }}%</td>
+                                <td>
+                                    Chest: {{ entry.chest }}cm,
+                                    Waist: {{ entry.waist }}cm,
+                                    Arms: {{ entry.arms }}cm
+                                </td>
+                                <td>{{ entry.notes }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No progress entries found. Start tracking your progress to see your journey!
+        </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    {% if progress_entries %}
+        // Prepare data for charts
+        const dates = [
+            {% for entry in progress_entries %}
+                '{{ entry.date|date:"M d" }}',
+            {% endfor %}
+        ].reverse();
+
+        const weights = [
+            {% for entry in progress_entries %}
+                {{ entry.weight }},
+            {% endfor %}
+        ].reverse();
+
+        const bodyFats = [
+            {% for entry in progress_entries %}
+                {{ entry.body_fat }},
+            {% endfor %}
+        ].reverse();
+
+        const chests = [
+            {% for entry in progress_entries %}
+                {{ entry.chest }},
+            {% endfor %}
+        ].reverse();
+
+        const waists = [
+            {% for entry in progress_entries %}
+                {{ entry.waist }},
+            {% endfor %}
+        ].reverse();
+
+        const arms = [
+            {% for entry in progress_entries %}
+                {{ entry.arms }},
+            {% endfor %}
+        ].reverse();
+
+        // Weight Chart
+        new Chart(document.getElementById('weightChart'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Weight (kg)',
+                    data: weights,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + ' kg';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Body Fat Chart
+        new Chart(document.getElementById('fatChart'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Body Fat (%)',
+                    data: bodyFats,
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Measurements Chart
+        new Chart(document.getElementById('measurementsChart'), {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'Chest (cm)',
+                        data: chests,
+                        borderColor: 'rgb(54, 162, 235)',
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: 'Waist (cm)',
+                        data: waists,
+                        borderColor: 'rgb(255, 206, 86)',
+                        tension: 0.1,
+                        fill: false
+                    },
+                    {
+                        label: 'Arms (cm)',
+                        data: arms,
+                        borderColor: 'rgb(153, 102, 255)',
+                        tension: 0.1,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + ' cm';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    {% endif %}
+});
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Your Notifications</h3>
+                </div>
+                <div class="card-body">
+                    {% if notifications %}
+                        <div class="list-group">
+                            {% for notification in notifications %}
+                                <div class="list-group-item {% if not notification.is_read %}list-group-item-primary{% endif %}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ notification.notification.title }}</h5>
+                                        <small>{{ notification.notification.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ notification.notification.message }}</p>
+                                    <small class="text-muted">
+                                        Type: {{ notification.notification.get_notification_type_display }}
+                                        {% if not notification.is_read %}
+                                            <a href="{% url 'notifications:mark_as_read' notification.id %}" class="btn btn-sm btn-outline-primary float-end">Mark as Read</a>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-center">No notifications available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card custom-login-card">
+                <div class="card-header text-center">
+                    <h3 class="text-center">Login</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="text" class="form-control mb-3" name="username" placeholder="Username" required>
+                        <input type="password" class="form-control mb-3" name="password" placeholder="Password" required>
+                        <!-- Forgot Password link -->
+                        <div style="text-align: right; margin-bottom: 10px;">
+                            <a href="{% url 'forgot_password' %}" style="color: #007bff;">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-block mt-2" style="width: 100%;">Login</button>
+                    </form>
+                    <p class="text-center mt-3">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

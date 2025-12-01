@@ -1,0 +1,346 @@
+{% extends 'appointments/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    position: relative;
+    min-height: 100vh;
+}
+
+.main-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 80px;
+}
+
+/* Progress Tracking Container */
+.progress-tracking-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: 600;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: translateY(-2px);
+}
+
+/* Tips Section */
+.tips-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.tips-section h5 {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.tips-section ul {
+    padding-left: 20px;
+}
+
+.tips-section li {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+}
+</style>
+
+<div class="main-wrapper">
+    <div class="container">
+        <div class="progress-tracking-container">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Track Your Progress</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="id_weight">Weight (kg) *</label>
+                            <input type="number" class="form-control" id="id_weight" name="weight" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_body_fat">Body Fat %</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="id_body_fat" name="body_fat" step="0.1">
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#bodyFatCalculator">
+                                    Calculate
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Body Measurements (cm)</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" id="id_chest" name="chest" placeholder="Chest" step="0.1">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" id="id_waist" name="waist" placeholder="Waist" step="0.1">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" id="id_arms" name="arms" placeholder="Arms" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_notes">Notes</label>
+                            <textarea class="form-control" id="id_notes" name="notes" rows="4" placeholder="Any additional notes about your progress..."></textarea>
+                        </div>
+
+                        <div class="tips-section">
+                            <h5>Tips for Accurate Measurements</h5>
+                            <ul>
+                                <li>Measure at the same time of day</li>
+                                <li>Use the same scale for consistency</li>
+                                <li>Measure body parts in a relaxed state</li>
+                                <li>For chest, measure at nipple level</li>
+                                <li>For waist, measure at navel level</li>
+                                <li>For arms, measure at bicep peak</li>
+                            </ul>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Save Progress</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Body Fat Calculator Modal -->
+<div class="modal fade" id="bodyFatCalculator" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Body Fat Calculator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Enter Your Measurements</h6>
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <select id="gender" class="form-select">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Age (years)</label>
+                            <input type="number" id="age" class="form-control" min="18">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Height (cm)</label>
+                            <input type="number" id="height" class="form-control" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Weight (kg)</label>
+                            <input type="number" id="calc_weight" class="form-control" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Waist (cm)</label>
+                            <input type="number" id="calc_waist" class="form-control" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Neck (cm)</label>
+                            <input type="number" id="calc_neck" class="form-control" step="0.1">
+                        </div>
+                        <div class="mb-3" id="hipField" style="display: none;">
+                            <label class="form-label">Hip (cm) - For females</label>
+                            <input type="number" id="calc_hip" class="form-control" step="0.1">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="calculateBodyFat()">Calculate</button>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Results</h6>
+                        <div id="bodyFatResult" class="alert alert-info" style="display: none;">
+                            Your estimated body fat: <span id="bodyFatPercentage">0</span>%
+                        </div>
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h6 class="card-title">Body Fat Percentage Categories</h6>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Men</th>
+                                            <th>Women</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Essential Fat</td>
+                                            <td>2-5%</td>
+                                            <td>10-13%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Athletes</td>
+                                            <td>6-13%</td>
+                                            <td>14-20%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fitness</td>
+                                            <td>14-17%</td>
+                                            <td>21-24%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Average</td>
+                                            <td>18-24%</td>
+                                            <td>25-31%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Obese</td>
+                                            <td>25%+</td>
+                                            <td>32%+</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="useCalculatedValue()">Use This Value</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('gender').addEventListener('change', function() {
+    const hipField = document.getElementById('hipField');
+    hipField.style.display = this.value === 'female' ? 'block' : 'none';
+});
+
+function calculateBodyFat() {
+    const gender = document.getElementById('gender').value;
+    const height = parseFloat(document.getElementById('height').value);
+    const weight = parseFloat(document.getElementById('calc_weight').value);
+    const waist = parseFloat(document.getElementById('calc_waist').value);
+    const neck = parseFloat(document.getElementById('calc_neck').value);
+    const hip = gender === 'female' ? parseFloat(document.getElementById('calc_hip').value) : 0;
+
+    if (!height || !weight || !waist || !neck || (gender === 'female' && !hip)) {
+        alert('Please fill in all required measurements');
+        return;
+    }
+
+    let bodyFat;
+    if (gender === 'male') {
+        bodyFat = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(height)) - 450;
+    } else {
+        bodyFat = 495 / (1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(height)) - 450;
+    }
+
+    bodyFat = Math.max(0, Math.min(bodyFat, 100));
+    document.getElementById('bodyFatPercentage').textContent = bodyFat.toFixed(1);
+    document.getElementById('bodyFatResult').style.display = 'block';
+}
+
+function useCalculatedValue() {
+    const bodyFat = document.getElementById('bodyFatPercentage').textContent;
+    document.getElementById('id_body_fat').value = bodyFat;
+    const modal = bootstrap.Modal.getInstance(document.getElementById('bodyFatCalculator'));
+    modal.hide();
+}
+
+// Auto-fill calculator weight when main weight is entered
+document.getElementById('id_weight').addEventListener('change', function() {
+    document.getElementById('calc_weight').value = this.value;
+});
+
+// Auto-fill calculator waist when main waist is entered
+document.getElementById('id_waist').addEventListener('change', function() {
+    document.getElementById('calc_waist').value = this.value;
+});
+</script>
+{% endblock %}
+{% endblock %}

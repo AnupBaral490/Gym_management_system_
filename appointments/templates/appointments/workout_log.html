@@ -1,0 +1,118 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Log Your Workout</h2>
+    
+    <form method="post" id="workoutForm" class="mb-4">
+        {% csrf_token %}
+        
+        {% if today_appointment %}
+        <input type="hidden" name="appointment" value="{{ today_appointment.id }}">
+        <div class="alert alert-info">
+            Logging workout for today's appointment at {{ today_appointment.time_slot }}
+        </div>
+        {% endif %}
+        
+        <div class="mb-3">
+            <label for="notes" class="form-label">Workout Notes</label>
+            <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="How was your workout today?"></textarea>
+        </div>
+        
+        <div id="exerciseContainer">
+            <!-- Exercise logs will be added here -->
+        </div>
+        
+        <button type="button" class="btn btn-secondary mb-3" onclick="addExercise()">
+            <i class="fas fa-plus"></i> Add Exercise
+        </button>
+        
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Save Workout</button>
+        </div>
+    </form>
+</div>
+
+<template id="exerciseTemplate">
+    <div class="card mb-3 exercise-entry">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Exercise</label>
+                    <select name="exercise" class="form-select" required onchange="updateInputFields(this)">
+                        <option value="">Select Exercise</option>
+                        {% for exercise in exercises %}
+                        <option value="{{ exercise.id }}" data-category="{{ exercise.category }}">{{ exercise.name }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if exercise.description %}
+                    <small class="form-text text-muted exercise-description" style="display: none;"></small>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-2 text-end">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeExercise(this)">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row strength-inputs">
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Sets</label>
+                    <input type="number" name="sets" class="form-control" min="0">
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Reps</label>
+                    <input type="number" name="reps" class="form-control" min="0">
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Weight (kg)</label>
+                    <input type="number" name="weight" class="form-control" min="0" step="0.5">
+                </div>
+            </div>
+            
+            <div class="row cardio-inputs" style="display: none;">
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Duration (minutes)</label>
+                    <input type="number" name="duration" class="form-control" min="0">
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+{% block extra_js %}
+<script>
+function addExercise() {
+    const template = document.getElementById('exerciseTemplate');
+    const container = document.getElementById('exerciseContainer');
+    const clone = template.content.cloneNode(true);
+    container.appendChild(clone);
+}
+
+function removeExercise(button) {
+    button.closest('.exercise-entry').remove();
+}
+
+function updateInputFields(select) {
+    const card = select.closest('.exercise-entry');
+    const category = select.options[select.selectedIndex].dataset.category;
+    const strengthInputs = card.querySelector('.strength-inputs');
+    const cardioInputs = card.querySelector('.cardio-inputs');
+    
+    if (category === 'cardio') {
+        strengthInputs.style.display = 'none';
+        cardioInputs.style.display = 'flex';
+    } else {
+        strengthInputs.style.display = 'flex';
+        cardioInputs.style.display = 'none';
+    }
+}
+
+// Add initial exercise entry
+document.addEventListener('DOMContentLoaded', function() {
+    addExercise();
+});
+</script>
+{% endblock %}
+{% endblock %}

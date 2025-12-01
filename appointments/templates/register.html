@@ -1,0 +1,144 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    .registration-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .card {
+        background-color: rgba(30, 30, 30, 0.75) !important;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        color: #f1f1f1;
+    }
+    .card-header {
+        background-color: transparent;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px 15px 0 0 !important;
+        color: #fff;
+    }
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px;
+        background: rgba(20, 20, 20, 0.6);
+        color: #f1f1f1;
+    }
+    .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #80bdff;
+        background: rgba(40, 40, 40, 0.8);
+        color: #fff;
+    }
+    .btn-primary {
+        border-radius: 8px;
+        padding: 12px;
+        font-weight: 600;
+        background-color: #007bff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .form-group label {
+        font-weight: 600;
+        color: #f1f1f1;
+    }
+    .form-text.text-muted {
+        color: #cccccc !important;
+    }
+    .alert {
+        border-radius: 8px;
+    }
+    ul.mb-0 li {
+        color: #e0e0e0;
+    }
+    .form-text {
+        color: #ffffff !important;
+    }
+    .form-text ul li {
+        color: #ffffff !important;
+    }
+</style>
+
+<div class="registration-container">
+    <div class="row justify-content-center w-100">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center mb-0">Create Account</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <small class="form-text" style="color: #ffffff !important;">Required. 150 characters or fewer. Letters, digits, and @/./+/-/_ only.</small>
+                        </div>
+                        
+                        <div class="form-group mt-3" style="display: block !important;">
+                            <label for="email" style="display: block !important;">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required style="display: block !important; width: 100%;">
+                            <small class="form-text" style="color: #ffffff !important; display: block !important;">Required. Please enter a valid email address.</small>
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="password1">Password</label>
+                            <input type="password" class="form-control" id="password1" name="password1" required>
+                            <small class="form-text" style="color: #ffffff !important;">
+                                Your password must:
+                                <ul class="mb-0" style="color: #ffffff !important;">
+                                    <li style="color: #ffffff !important;">✅ At least 8 characters</li>
+                                    <li style="color: #ffffff !important;">⚠️ Not similar to your username</li>
+                                    <li style="color: #ffffff !important;">🔒 Not a commonly used password</li>
+                                    <li style="color: #ffffff !important;">❌ Not entirely numeric</li>
+                                    <li style="color: #ffffff !important;">🔡 Include letters & numbers</li>
+                                </ul>
+                            </small>
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="password2">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" name="password2" required>
+                            <small class="form-text" style="color: #ffffff !important;">Enter the same password as before, for verification.</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 mt-4">Register</button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

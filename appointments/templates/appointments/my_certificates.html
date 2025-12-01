@@ -1,0 +1,15 @@
+{% extends 'appointments/base.html' %}
+{% block content %}
+<h2 style="margin-top: 80px; text-align: center; font-size: 2rem; font-weight: bold; color: #333;">My Certificates</h2>
+{% if certificates %}
+    <ul>
+        {% for cert in certificates %}
+            <li>
+                <a href="{{ cert.file.url }}" target="_blank">Download Certificate ({{ cert.issued_date }})</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+<p style="margin-top: 30px; text-align: center; font-size: 1.1rem; color: #666;">No certificates awarded yet.</p>
+{% endif %}
+{% endblock %}

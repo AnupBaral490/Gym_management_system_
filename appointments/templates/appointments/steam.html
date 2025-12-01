@@ -1,0 +1,300 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Steam and Sauna{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: #f5f5f5;
+        background-color: #111;
+      }
+    
+      .hero-yoga {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                    url('/static/img/s1.jpg') center/cover no-repeat;
+        height: 450px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+      
+    
+      .hero-yoga .overlay {
+        padding: 40px;
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+      }
+    
+      .hero-title {
+        font-size: 56px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #FFD700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      }
+    
+      .hero-description {
+        font-size: 18px;
+        color: #e0e0e0;
+        line-height: 1.7;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      }
+
+      .steam-room-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 20px;
+        background-color: white;
+        color: #ddd;
+      }
+    
+      .steam-text {
+        max-width: 600px;
+        margin-right: 40px;
+        margin-bottom: 20px;
+      }
+    
+      .steam-text h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #FFD700;
+      }
+    
+      .steam-text p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: black;
+      }
+    
+      .steam-image img {
+        max-width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(134, 93, 93, 0.99);
+      }
+    
+      @media (max-width: 768px) {
+        .steam-room-section {
+          flex-direction: column;
+          text-align: center;
+        }
+    
+        .steam-text {
+          margin: 0 0 30px 0;
+        }
+    
+        .steam-image img {
+          max-width: 90%;
+        }
+      }
+
+      .steam-sauna-section {
+        background: linear-gradient(to right, #1a1a1a, #111);
+        color: #eee;
+        padding: 60px 20px;
+        font-family: 'Poppins', sans-serif;
+      }
+    
+      .steam-sauna-section .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: auto;
+      }
+    
+      .text-content {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+      }
+    
+      .text-content h2 {
+        font-size: 36px;
+        color: #FFD700;
+        margin-bottom: 20px;
+      }
+    
+      .text-content p {
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+    
+      .text-content ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+      }
+    
+      .text-content ul li {
+        margin-bottom: 10px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+      }
+    
+      .image-content {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+        text-align: center;
+      }
+    
+      .image-content img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      }
+    
+      @media (max-width: 768px) {
+        .steam-sauna-section .container {
+          flex-direction: column-reverse;
+          text-align: center;
+        }
+    
+        .text-content h2 {
+          font-size: 28px;
+        }
+      }
+ 
+      .why-steam-sauna {
+        background-color: #1c1c1c;
+        color: #f5f5f5;
+        padding: 80px 20px;
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+      }
+    
+      .why-container {
+        max-width: 1200px;
+        margin: auto;
+      }
+    
+      .why-steam-sauna h2 {
+        font-size: 36px;
+        color: #FFD700;
+        margin-bottom: 10px;
+      }
+    
+      .section-intro {
+        font-size: 18px;
+        margin-bottom: 40px;
+        color: #ccc;
+      }
+    
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+    
+      .feature-card {
+        background-color: #2a2a2a;
+        padding: 30px 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+    
+      .feature-card h3 {
+        font-size: 22px;
+        color: #FFD700;
+        margin-bottom: 15px;
+      }
+    
+      .feature-card p {
+        font-size: 16px;
+        color: #ddd;
+        line-height: 1.6;
+      }
+    
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      }
+
+</style>
+
+<section class="hero-yoga">
+    <div class="overlay">
+      <h1 class="hero-title">STEAM AND SAUNA</h1>
+      <p class="hero-description">
+        Devi’s Gym Nepal understands the importance of recovery and relaxation in achieving your fitness goals. So, we have designed relaxing steam and sauna facilities for our gym members at Devi’s Gym Nepal, Pokhara, to provide rejuvenation after an intense workout session. 
+      </p>
+    </div>
+  </section>
+
+  <section class="steam-room-section">
+    <div class="steam-text">
+      <h2>Steam Room: Therapeutic Warmth</h2>
+      <p>Our steam room offers a humid, therapeutic environment that promotes deep muscle relaxation. This natural remedy alleviates muscle soreness and improves flexibility, leaving you feeling refreshed and ready for your next challenge.</p>
+    </div>
+    <div class="steam-image">
+      <img src="/static/img/s2.jpg" alt="Steam Room">
+    </div>
+  </section>
+
+
+  <section class="steam-sauna-section">
+    <div class="container">
+      <div class="text-content">
+        <h2>Steam & Sauna: Your Post-Workout Paradise</h2>
+        <p>
+          Unwind, recharge, and revive. Our steam and sauna rooms are designed to offer the perfect retreat after a challenging workout. Breathe in the warmth as your muscles relax, tension melts away, and your body begins to heal and recover.
+        </p>
+        <ul>
+          <li>🌿 Improves blood circulation</li>
+          <li>💧 Detoxifies the body</li>
+          <li>🧘‍♂️ Enhances flexibility & muscle recovery</li>
+          <li>😌 Reduces stress and mental fatigue</li>
+        </ul>
+        <p>
+          Whether you're prepping for your next big lift or just need a quiet escape, our sauna and steam facilities are here to help you feel your best.
+        </p>
+      </div>
+      <div class="image-content">
+        <img src="/static/img/s3.jpg" alt="Steam and Sauna Room">
+      </div>
+    </div>
+  </section>
+
+
+  <section class="why-steam-sauna">
+    <div class="why-container">
+      <h2>Why Choose Our Steam & Sauna?</h2>
+      <p class="section-intro">
+        At Devi’s Gym Nepal, we believe that recovery is just as important as training. Our facilities are designed for both physical and mental restoration.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>✨ Rejuvenation</h3>
+          <p>Step into a world of calm and comfort. Let the warmth of our steam and sauna rooms revive your senses and energy.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🔥 Detox & Cleanse</h3>
+          <p>Flush out toxins, open up your pores, and let your skin breathe with each soothing session.</p>
+        </div>
+        <div class="feature-card">
+          <h3>💪 Faster Recovery</h3>
+          <p>Alleviate muscle soreness and joint stiffness after workouts with consistent steam or sauna use.</p>
+        </div>
+        <div class="feature-card">
+          <h3>🧘‍♀️ Mental Wellness</h3>
+          <p>Take a moment to disconnect. Reduce anxiety and improve your mood in a serene atmosphere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

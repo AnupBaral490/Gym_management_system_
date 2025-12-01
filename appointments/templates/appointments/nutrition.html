@@ -1,0 +1,258 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Nutrition {% endblock %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: #f5f5f5;
+        background-color: #111;
+      }
+    
+      .hero-yoga {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                    url('/static/img/n1.webp') center/cover no-repeat;
+        height: 450px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        image-rendering: auto; /* default */
+      }
+      
+      
+    
+      .hero-yoga .overlay {
+        padding: 40px;
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+      }
+    
+      .hero-title {
+        font-size: 56px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #FFD700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      }
+    
+      .hero-description {
+        font-size: 18px;
+        color: #e0e0e0;
+        line-height: 1.7;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      }
+
+
+      .nutrition-section {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 60px 20px;
+        background-color:rgb(248, 242, 242);
+      }
+    
+      .nutrition-text {
+        max-width: 600px;
+        color: #eee;
+      }
+    
+      .nutrition-text h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #FFD700;
+      }
+    
+      .nutrition-text p {
+        font-size: 18px;
+        line-height: 1.6;
+        color: black;
+      }
+    
+      .nutrition-img img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      }
+    
+      @media (max-width: 768px) {
+        .nutrition-section {
+          flex-direction: column;
+        }
+      }
+
+      .nutritionist-section {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 60px 20px;
+        background-color: #1a1a1a;
+      }
+      
+      .nutritionist-img img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      }
+      
+      .nutritionist-text {
+        max-width: 600px;
+        color: #eee;
+      }
+      
+      .nutritionist-text h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #FFD700;
+      }
+      
+      .nutritionist-text p {
+        font-size: 18px;
+        line-height: 1.6;
+      }
+      
+      @media (max-width: 768px) {
+        .nutritionist-section {
+          flex-direction: column;
+        }
+      }
+      .nutrition-benefits {
+        background-color: #111;
+        color: #fff;
+        padding: 70px 20px;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .nutrition-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+        gap: 40px;
+        max-width: 1200px;
+        margin: auto;
+      }
+      
+      .nutrition-text {
+        flex: 1;
+        max-width: 600px;
+      }
+      
+      .nutrition-text h2 {
+        font-size: 38px;
+        color: #FFD700;
+        margin-bottom: 20px;
+      }
+      
+      .nutrition-text p {
+        font-size: 18px;
+        line-height: 1.7;
+        margin-bottom: 25px;
+        color: blue;
+      }
+      
+      .nutrition-list {
+        list-style: none;
+        padding: 0;
+        font-size: 16px;
+        line-height: 2;
+      }
+      
+      .nutrition-img img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+      }
+      
+      @media (max-width: 768px) {
+        .nutrition-content {
+          flex-direction: column;
+          text-align: center;
+        }
+      
+        .nutrition-text h2 {
+          font-size: 30px;
+        }
+      
+        .nutrition-text p,
+        .nutrition-list {
+          font-size: 16px;
+        }
+      }
+      
+</style>
+
+<section class="hero-yoga">
+    <div class="overlay">
+      <h1 class="hero-title">NUTRITIONIST</h1>
+      <p class="hero-description">
+        In Devi’s Gym Nepal, Pokhara, we believe that achieving your fitness goals is not just about hitting the weights and pounding the treadmill; it’s also about nourishing your body with the right nutrition.
+         That’s why we offer nutritional counselling services to complement your fitness journey.
+      </p>
+    </div>
+  </section>
+
+  <section class="nutrition-section">
+    <div class="nutrition-text">
+      <h2>Nutritional Counseling</h2>
+      <p>
+        We strongly believe that nutrition is vital to achieving and maintaining optimal fitness and performance for our members. We provide a well-balanced diet and recommend whole, unprocessed foods like fruits, vegetables, lean proteins, and whole grains for muscle growth along with power through your workouts.
+        These foods are packed with essential nutrients your body needs to thrive.
+      </p>
+    </div>
+    <div class="nutrition-img">
+      <img src="/static/img/n2.webp" alt="Nutrition Bowl">
+    </div>
+  </section>
+
+  <section class="nutritionist-section">
+    <div class="nutritionist-img">
+      <img src="/static/img/n3.jpg" alt="Nutritionist Sauna">
+    </div>
+    <div class="nutritionist-text">
+      <h2>Partnering With A Nutritionist</h2>
+      <p>
+        We provide personalized nutritional counselling from our experienced team of nutritionists to our gym members. From meal planning and portion control to adding protein, fiber, and carbs, we're here to empower you with the knowledge and tools for success.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="nutrition-benefits">
+    <div class="nutrition-content">
+      <div class="nutrition-text">
+        <h2>Fuel Your Gains with the Right Nutrition</h2>
+        <p>
+          Whether you're bulking, cutting, or maintaining — proper nutrition is the key to unlocking peak performance.
+          At Devi’s Gym Nepal, we guide our members with personalized nutrition tips to support every fitness goal.
+        </p>
+        <ul class="nutrition-list">
+          <li>🥗 Boost muscle growth with high-protein meals</li>
+          <li>💧 Stay hydrated for better endurance and recovery</li>
+          <li>🍎 Enhance fat loss through balanced macros</li>
+          <li>🥑 Improve energy levels and workout focus</li>
+          <li>🥤 Post-workout nutrition guidance for faster recovery</li>
+        </ul>
+      </div>
+      <div class="nutrition-img">
+        <img src="/static/img/n4.jpeg" alt="Gym Nutrition" />
+      </div>
+    </div>
+  </section>
+  
+{% endblock %}

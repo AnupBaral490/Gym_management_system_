@@ -1,0 +1,16 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2>You have been logged out</h2>
+            <p class="lead mt-3">Thank you for using our Gym Appointment System!</p>
+            <div class="mt-4">
+                <a href="{% url 'login' %}" class="btn btn-primary">Login Again</a>
+                <a href="{% url 'home' %}" class="btn btn-outline-primary">Go to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

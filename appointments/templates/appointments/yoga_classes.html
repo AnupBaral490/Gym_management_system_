@@ -1,0 +1,367 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Register - Gym Appointment System{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: #f5f5f5;
+        background-color: #111;
+      }
+    
+      .hero-yoga {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                    url('/static/img/pt1.avif') center/cover no-repeat;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+      
+    
+      .hero-yoga .overlay {
+        padding: 40px;
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+      }
+    
+      .hero-title {
+        font-size: 56px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #FFD700;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      }
+    
+      .hero-description {
+        font-size: 18px;
+        color: #e0e0e0;
+        line-height: 1.7;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      }
+    
+      .yoga-section {
+        background: #fff;
+        color: #111;
+        padding: 60px 20px;
+        text-align: center;
+      }
+    
+      .yoga-section h2 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #222;
+      }
+    
+      .yoga-section p {
+        max-width: 900px;
+        margin: 0 auto;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #555;
+      }
+    
+      @media screen and (max-width: 768px) {
+        .hero-title {
+          font-size: 40px;
+        }
+    
+        .hero-description {
+          font-size: 16px;
+        }
+      }
+
+
+      .yoga-schedule {
+        background-color: #000;
+        padding: 60px 20px;
+        color: white;
+        font-family: 'Open Sans', sans-serif;
+      }
+      
+      .yoga-schedule .container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        max-width: 1200px;
+        margin: auto;
+      }
+      
+      .image-box img {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      }
+      
+      .content-box {
+        max-width: 600px;
+        padding: 20px;
+        text-align: left;
+      }
+      
+      .schedule-heading {
+        font-size: 36px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 20px;
+      }
+      
+      .schedule-description {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #e0e0e0;
+        margin-bottom: 30px;
+      }
+      
+      .schedule-note {
+        font-size: 16px;
+        color: #ffeb3b;
+        margin-bottom: 10px;
+      }
+      
+      .schedule-contact {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFD700;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .yoga-schedule .container {
+          flex-direction: column;
+          text-align: center;
+        }
+      
+        .content-box {
+          padding: 20px 0;
+        }
+      }
+      
+
+      .why-yoga {
+        padding: 60px 20px;
+        background-color: #f5f5f5;
+        font-family: 'Open Sans', sans-serif;
+        color: #333;
+      }
+      
+      .why-container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        max-width: 1200px;
+        margin: auto;
+        flex-wrap: wrap;
+      }
+      
+      .why-text {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+      }
+      
+      .why-text h2 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #000;
+      }
+      
+      .why-text p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      .why-image {
+        flex: 0 0 300px;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .why-image img {
+        width: 100%;
+        max-width: 300px;
+        height: 300px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .why-container {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+      
+        .why-image {
+          padding-top: 0;
+        }
+      }
+      
+      .yoga-instructor {
+        background-color: #000;
+        color: #fff;
+        padding: 60px 20px;
+      }
+      
+      .instructor-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        max-width: 1200px;
+        margin: auto;
+      }
+      
+      .instructor-image img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      }
+      
+      .instructor-text {
+        max-width: 600px;
+        text-align: center;
+      }
+      
+      .instructor-text h2 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+      
+      .instructor-text p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+      
+</style>
+
+
+
+<section class="hero-yoga">
+    <div class="overlay">
+      <h1 class="hero-title">YOGA CLASSES</h1>
+      <p class="hero-description">
+        Experience holistic wellness at Devi’s Gym Nepal, Pokhara, through our expertly guided yoga classes designed for all levels. Relax your mind, strengthen your body, and find your inner peace.
+      </p>
+    </div>
+  </section>
+  
+  <section class="yoga-section">
+    <h2>Embrace Balance with Our Expert-Led Yoga Sessions</h2>
+    <p>
+      Our certified yoga instructors are here to guide you through various yoga techniques — from gentle stretching to advanced postures — tailored to suit your flexibility and fitness level.
+      Whether you're just beginning or looking to deepen your practice, our yoga program helps improve flexibility, strength, posture, and mental clarity.
+    </p>
+  </section>
+
+
+  <section class="yoga-schedule">
+    <div class="container">
+      <div class="image-box">
+        <img src="/static/img/yoga1.jpeg" alt="Yoga Pose">
+      </div>
+      <div class="content-box">
+        <h2 class="schedule-heading">Schedule Of Classes</h2>
+        <p class="schedule-description">
+          The yoga classes at Devi’s Gym Nepal in Devisfall, Pokhara, are designed for your busy lifestyles,
+          running from <strong>6:00 a.m. to 7:15 a.m.</strong> every Sunday through Thursday.
+        </p>
+        <p class="schedule-note">Call us and Book your class Today!</p>
+        <p class="schedule-contact">061-541707 / +977-9746471643</p>
+      </div>
+    </div>
+  </section>
+  
+
+  <section class="why-yoga">
+    <div class="why-container">
+      <div class="why-text">
+        <h2>Why Yoga Classes At Devi’s Gym?</h2>
+        <p>
+          The yoga classes at Pokhara, Devi’s Gym Nepal, offer a variety of yoga classes
+          designed for all levels in a clean and hygienic environment. Our experienced and
+          extremely passionate yoga instructor will help you to improve flexibility, find inner
+          peace, or reduce stress.
+        </p>
+        <p>
+          Overall, Devi’s Gym Nepal is a great place for you in Pokhara to take yoga classes if
+          you are looking for a variety of classes, experienced instructors, and a focus on
+          overall well-being.
+        </p>
+      </div>
+      <div class="why-image">
+        <img src="/static/img/yoga2.jpg" alt="Yoga Practice">
+      </div>
+    </div>
+  </section>
+  
+  <section class="yoga-instructor">
+    <div class="container">
+      <div class="instructor-content">
+        <div class="instructor-image">
+          <img src="/static/img/yoga4.webp" alt="Yoga Instructor">
+        </div>
+        <div class="instructor-text">
+          <h2>Meet The Yoga Instructors</h2>
+          <p>Mrs. Srijana Ghimire is an experienced and extremely passionate Yoga instructor.
+            Her dedication to yoga and fitness is just the energy you want to start your day with.</p>
+          <p>She believes in the transformative power of yoga, not just for the body, but for the
+            mind and spirit as well. With her guidance, practitioners find a harmonious balance
+            between strength, flexibility, and inner peace on their yoga journey.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="yoga-workshops">
+    <div class="container" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; padding: 60px 20px; background-color: #f5f5f5; color: #111;">
+      <div class="workshop-text" style="flex: 1; min-width: 300px; max-width: 600px; padding: 20px;">
+        <h2 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 20px; color: #000;">Yoga Workshops And Events</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px;">
+          In addition to our regular classes at Devi’s Gym Nepal, Pokhara, we offer yoga workshops and events like:
+        </p>
+        <ul style="padding-left: 20px; margin-bottom: 30px; line-height: 1.8;">
+          <li>Yoga for Stress Relief</li>
+          <li>Yoga for Beginners</li>
+          <li>Yin Yoga for Deep Relaxation</li>
+          <li>Partner Yoga</li>
+        </ul>
+        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px;">
+          These yoga workshops and events provide an opportunity to:
+        </p>
+        <ul style="padding-left: 20px; line-height: 1.8;">
+          <li>Learn new yoga techniques</li>
+          <li>Deepen your practice</li>
+          <li>Connect with other yogis</li>
+          <li>Explore new aspects of yoga</li>
+        </ul>
+      </div>
+      <div class="workshop-image" style="flex: 1; min-width: 300px; padding: 20px; text-align: center;">
+        <img src="/static/img/yoga3.jpg" alt="Yoga Workshop" style="width: 100%; max-width: 500px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+      </div>
+    </div>
+  </section>
+  
+
+{% endblock %}

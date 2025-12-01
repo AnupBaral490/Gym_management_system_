@@ -1,0 +1,543 @@
+{% load static %}
+{% load notification_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gym Appointment System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    <style>
+        /* Navbar Styling */
+        .navbar {
+            background-color: #111 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+        }
+        
+        /* Navbar Links */
+        .navbar-nav .nav-item .nav-link {
+            color: #fff !important;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-item .nav-link:hover,
+        .navbar-nav .nav-item .nav-link:focus {
+            background-color: #ffb703;
+            color: #111 !important;
+            border-radius: 5px;
+        }
+        
+        /* Dropdown Menu Styling */
+        .navbar-nav .dropdown-menu {
+            background-color: #fff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .navbar-nav .dropdown-menu .dropdown-item {
+            color: #111 !important;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        .navbar-nav .dropdown-menu .dropdown-item:hover {
+            background-color: #ffb703;
+            color: #111 !important;
+        }
+        
+        /* Form Button in Navbar */
+        .navbar .nav-item form button {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 12px 18px;
+            cursor: pointer;
+        }
+        
+        .navbar .nav-item form button:hover {
+            color: #ffb703;
+        }
+        
+        /* Mobile Navbar Toggler */
+        .navbar-toggler {
+            border-color: #ffb703;
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 183, 3, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        /* Active Links */
+        .nav-item.active .nav-link {
+            background-color: #ffb703 !important;
+            color: #111 !important;
+            border-radius: 5px;
+        }
+
+        /* General Body and Container Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+        
+        
+        /* Alerts Styling */
+        .alert {
+            margin-top: 100px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .alert-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .container {
+            padding-bottom: 80px; /* enough space for footer */
+        }
+        
+        
+        /* Media Queries for Responsiveness */
+        
+        /* Large screens: Desktop */
+        @media (min-width: 1200px) {
+            .navbar-nav .nav-item .nav-link {
+                font-size: 18px; /* Larger text for desktop */
+            }
+        
+            .navbar-nav {
+                margin-left: auto; /* Align nav to the right on large screens */
+            }
+        }
+        
+        /* Medium Screens: Tablet */
+        @media (max-width: 992px) {
+            .navbar-nav .nav-item .nav-link {
+                font-size: 14px; /* Adjust font size for tablet */
+            }
+        
+            .navbar-brand img {
+                height: 30px;
+                 /* Reduce logo size for tablet screens */
+            }
+        
+            .navbar-toggler-icon {
+                background-color: #ffb703; /* Keep the yellow toggler icon */
+            }
+        
+            /* Align navbar items center on medium screens */
+            .navbar-nav {
+                text-align: center;
+            }
+        }
+        
+        /* Small Screens: Mobile */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                width: 100%; /* Take full width on mobile */
+                text-align: center; /* Center align items */
+            }
+        
+            .navbar-toggler-icon {
+                background-color: #ffb703; /* Keep yellow toggler icon */
+            }
+        
+            .navbar .navbar-collapse {
+                margin-top: 20px; /* Add spacing for the collapsed menu */
+            }
+        
+            .navbar-nav .nav-item .nav-link {
+                font-size: 14px; /* Smaller text on mobile */
+                padding: 12px; /* Less padding on mobile */
+            }
+        
+            .navbar-brand img {
+                height: 30px; /* Further reduce logo size for mobile */
+            }
+        }
+        
+        /* Very Small Screens: Extra Mobile */
+        @media (max-width: 480px) {
+            .navbar-nav .nav-item .nav-link {
+                font-size: 12px; /* Even smaller font size for small mobile screens */
+            }
+        
+            .navbar-nav .nav-item {
+                padding: 10px; /* Reduce padding for small screens */
+            }
+        }
+
+          
+        html, body {
+            height: 100%;
+            margin: 0;
+          }
+          
+          body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+          }
+          
+          main {
+            flex: 1;
+          }
+          
+          /* Footer Styling */
+          .site-footer {
+            background-color: #111;
+            color: #fff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 14px;
+          }
+          
+          .footer-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 0 20px;
+          }
+          
+          /* Common Section Styling */
+          .footer-left,
+          .footer-center,
+          .footer-right {
+            flex: 1;
+            min-width: 200px;
+            margin: 15px 10px;
+          }
+          
+          /* Adjusting alignment */
+          .footer-center {
+            display: flex;
+            justify-content: flex-start; /* Align left by default */
+            margin-left: 200px; /* Push middle section a bit to the right */
+          }
+          
+          .footer-right {
+            text-align: right;
+            padding-right: 30px; /* Push right section more right */
+          }
+          
+          .footer-center i,
+          .footer-right i {
+            margin-right: 15px;
+          }
+          
+          .footer-center a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 18px;
+            transition: color 0.3s;
+          }
+          
+          .footer-center a:hover {
+            color: #0dcaf0;
+          }
+          
+          /* Responsive Design */
+          @media (max-width: 768px) {
+            .footer-container {
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+            }
+          
+            .footer-left,
+            .footer-center,
+            .footer-right {
+              margin: 10px 0;
+              text-align: center;
+              padding-right: 0;
+            }
+          
+            .footer-center {
+              margin-left: 0;
+              justify-content: center;
+            }
+          }
+          
+   
+          
+        
+    </style>
+    
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <main>
+        
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #111; margin-bottom: 0;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="/static/img/logoo.png" alt="Devi's Gym Logo" 
+                     style="height: 40px; width: auto; 
+                            filter: brightness(1.8) drop-shadow(0 0 6px white) 
+                                              drop-shadow(0 0 8px #00bfff) 
+                                              drop-shadow(0 0 12px #ff9900); 
+                            transition: all 0.3s ease-in-out;">
+            </a>
+            
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="workoutDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-dumbbell"></i> Workouts
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'workout_log' %}">Log Workout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'workout_history' %}">Workout History</a></li>
+                                <li><a class="dropdown-item" href="{% url 'track_progress' %}">Track Progress</a></li>
+                                <li><a class="dropdown-item" href="{% url 'progress_history' %}">View Progress</a></li>
+                            </ul>
+                        </li>
+
+                     
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="workoutDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-concierge-bell"></i> Services
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'personal_training' %}">Personal Training</a></li>
+                                <li><a class="dropdown-item" href="{% url 'yoga_classes' %}">Yoga Classes</a></li>
+                                <li><a class="dropdown-item" href="{% url 'strength_training' %}">Strength Training</a></li>
+                                <li><a class="dropdown-item" href="{% url 'nutrition' %}">Nutritionist</a></li>
+                                <li><a class="dropdown-item" href="{% url 'steam' %}">Steam and Sauna</a></li>
+                                <li><a class="dropdown-item" href="{% url 'bmi' %}">BMI Calculator</a></li>            
+                            </ul>
+                        </li>
+
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'book_appointment' %}">Book Appointment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_appointments' %}">My Appointments</a>
+                        </li>
+                        <li class="nav-item {% block contactactive %} {% endblock contactactive %}">
+                            <a class="nav-link" href="/contact"><i class="fas fa-address-book"></i> Contact US</a>
+                        </li>
+                        
+                       
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="achievementsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-trophy"></i> Achievements
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="achievementsDropdown">
+                                <a class="dropdown-item" href="{% url 'my_certificates' %}">My Certificates</a>
+                                <a class="dropdown-item" href="{% url 'my_badges' %}">My Badges</a>
+                                <a class="dropdown-item" href="{% url 'leaderboard' %}">Leaderboard</a>
+                            </div>
+                        </li>
+
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                {% if user.userprofile.profile_photo %}
+                                    <img src="{{ user.userprofile.profile_photo.url }}" alt="Profile Photo" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                                {% else %}
+                                    <i class="fas fa-user-circle"></i>
+                                {% endif %}
+                                {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" style="min-width: 320px; padding: 0; border: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                                <li class="dropdown-item-text p-3" style="background: linear-gradient(135deg, #343a40 0%, #212529 100%); color: white;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            {% if user.userprofile.profile_photo %}
+                                                <img src="{{ user.userprofile.profile_photo.url }}" alt="Profile Photo" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #ffb703;">
+                                            {% else %}
+                                                <i class="fas fa-user-circle fa-3x" style="color: #ffb703;"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0" style="font-weight: 600;">{{ user.get_full_name|default:user.username }}</h6>
+                                            <small class="text-light">{{ user.email }}</small>
+                                            <div class="mt-2">
+                                                <span class="badge bg-warning text-dark">Member</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="p-3">
+                                    <h6 class="mb-3" style="color: #343a40; font-weight: 600;">
+                                        <i class="fas fa-calendar-check me-2" style="color: #ffb703;"></i>Upcoming Appointments
+                                    </h6>
+                                    {% if user.appointment_set.all %}
+                                        {% for appointment in user.appointment_set.all|slice:":3" %}
+                                            <div class="mb-2 p-2" style="background-color: #f8f9fa; border-radius: 5px;">
+                                                <small class="text-muted d-block">{{ appointment.date|date:"M d, Y" }} at {{ appointment.time|time:"g:i A" }}</small>
+                                                <div class="fw-medium">{{ appointment.service.name }}</div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if user.appointment_set.count > 3 %}
+                                            <a href="{% url 'my_appointments' %}" class="btn btn-sm btn-warning w-100 mt-2">
+                                                <i class="fas fa-list me-1"></i>View All Appointments
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="text-center p-3" style="background-color: #f8f9fa; border-radius: 5px;">
+                                            <i class="fas fa-calendar-times fa-2x mb-2" style="color: #6c757d;"></i>
+                                            <p class="text-muted mb-0">No upcoming appointments</p>
+                                        </div>
+                                    {% endif %}
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li class="p-2">
+                                    <div class="d-grid gap-2">
+                                        <a class="btn btn-outline-dark btn-sm" href="{% url 'upload_photo' %}">
+                                            <i class="fas fa-camera me-2"></i>Update Profile Photo
+                                        </a>
+                                        <a class="btn btn-outline-dark btn-sm" href="{% url 'my_appointments' %}">
+                                            <i class="fas fa-calendar-alt me-2"></i>Manage Appointments
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li class="p-2">
+                                    <form method="post" action="{% url 'full_logout' %}" class="d-inline w-100">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm w-100" style="background-color: #000; color: #fff;">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+
+                   
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+  
+
+
+
+    <div class="container mt-5" style="margin-top: 5rem;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            {% csrf_token %}
+            {% show_notifications user %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+  
+</main>
+    {% if request.path != '/login/' and request.path != '/register/' %}
+
+   <!-- Footer -->
+<footer class="site-footer">
+    <div class="footer-container">
+      <!-- Left -->
+      <div class="footer-left">
+        <p>&copy; 2025 Devis Fitness Training Center</p>
+        <p>All Rights Reserved</p>
+      </div>
+  
+      <!-- Center -->
+      <div class="footer-center">
+        <!-- Replace the href values with your actual links -->
+        <a href="https://www.google.com/maps/place/Devi's+Gym+and+Cafe/@28.1894062,83.9566794,17z/data=!4m14!1m7!3m6!1s0x399595004b6a7f93:0xf313729e7fdb843b!2sDevi's+Gym+and+Cafe!8m2!3d28.1894062!4d83.9592543!16s%2Fg%2F11v_9_66jl!3m5!1s0x399595004b6a7f93:0xf313729e7fdb843b!8m2!3d28.1894062!4d83.9592543!16s%2Fg%2F11v_9_66jl?entry=ttu" target="_blank" title="Location">
+          <i class="fas fa-map-marker-alt"></i>
+        </a>
+        <a href="https://www.instagram.com/devisgym_pokhara/" target="_blank" title="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.facebook.com/DevisGym" target="_blank" title="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+      </div>
+  
+      <!-- Right -->
+      <div class="footer-right">
+        <p><i class="fas fa-map-marker-alt"></i> Pokhara-17 Chhorepatan, Devisfall</p>
+        <p><i class="fas fa-phone"></i> +977-9746471643</p>
+        <p><i class="fas fa-envelope"></i> devisgym77@gmail.com</p>
+      </div>
+    </div>
+  </footer>
+  
+      
+    {% endif %}   
+  
+      
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,418 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Subscribe to {{ plan.name }}{% endblock %}
+
+{% block content %}
+<style>
+/* Main Container Styles */
+.subscription-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    min-height: 100vh;
+    padding: 3rem 0;
+}
+
+/* Card Styles */
+.subscription-card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(44, 62, 80, 0.1);
+    border: none;
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #2e86de, #27ae60);
+    color: white;
+    padding: 2rem;
+    border-bottom: none;
+}
+
+.card-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 2.5rem;
+}
+
+/* Plan Details Section */
+.plan-details {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(46, 134, 222, 0.1);
+}
+
+.plan-details h5 {
+    color: #2e86de;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.plan-details p {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.plan-details .price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #27ae60;
+}
+
+/* QR Section Styles */
+.qr-section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2e86de, #27ae60);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.qr-section-title i {
+    font-size: 2.4rem;
+    background: linear-gradient(135deg, #2e86de, #27ae60);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.qr-code-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 15px 50px rgba(44, 62, 80, 0.1);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(46, 134, 222, 0.1);
+}
+
+.qr-code-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(44, 62, 80, 0.15);
+}
+
+.qr-code-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2e86de, #27ae60);
+}
+
+.qr-code-glow {
+    display: inline-block;
+    border-radius: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, #2e86de 0%, #27ae60 100%);
+    box-shadow: 0 0 50px 15px rgba(46, 134, 222, 0.2);
+    animation: glow 3s infinite alternate;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes glow {
+    0% { 
+        box-shadow: 0 0 50px 15px rgba(46, 134, 222, 0.2);
+        transform: scale(1);
+    }
+    100% { 
+        box-shadow: 0 0 70px 25px rgba(39, 174, 96, 0.3);
+        transform: scale(1.02);
+    }
+}
+
+.qr-code-img {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 20px;
+    border: 10px solid #fff;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.qr-code-img:hover {
+    transform: scale(1.05) rotate(-2deg);
+}
+
+.qr-method-label {
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    background: linear-gradient(135deg, #2e86de, #27ae60);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.qr-account-details {
+    font-size: 1.2em;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding: 1rem 2rem;
+    background: #f8f9fa;
+    border-radius: 16px;
+    border: 1px solid rgba(46, 134, 222, 0.1);
+    text-align: center;
+    font-weight: 500;
+}
+
+.qr-instructions {
+    color: #2c3e50;
+    font-size: 1.2em;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    line-height: 1.8;
+    padding: 0 1rem;
+}
+
+.qr-instructions i {
+    color: #27ae60;
+    margin-right: 0.8rem;
+    font-size: 1.3em;
+}
+
+/* Form Styles */
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+
+.form-select, .form-control {
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(46, 134, 222, 0.2);
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #2e86de;
+    box-shadow: 0 0 0 0.2rem rgba(46, 134, 222, 0.15);
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+/* Alert Styles */
+.alert {
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: none;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e9 100%);
+    border-left: 4px solid #2e86de;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    border-left: 4px solid #e53935;
+}
+
+.alert-heading {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.alert ul {
+    margin-bottom: 0;
+    padding-left: 1.2rem;
+}
+
+.alert ul li {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+/* Button Styles */
+.btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2e86de, #27ae60);
+    border: none;
+    box-shadow: 0 4px 15px rgba(46, 134, 222, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 134, 222, 0.3);
+    background: linear-gradient(135deg, #27ae60, #2e86de);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* File Upload Customization */
+input[type="file"] {
+    padding: 0.8rem;
+    border: 2px dashed rgba(46, 134, 222, 0.2);
+    border-radius: 12px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]:hover {
+    border-color: #2e86de;
+    background: #f1f8ff;
+}
+</style>
+
+<div class="subscription-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="subscription-card">
+                    <div class="card-header">
+                        <h2>Subscribe to {{ plan.name }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="plan-details">
+                            <h5><i class="fas fa-info-circle me-2"></i>Plan Details</h5>
+                            <p><i class="fas fa-clock me-2"></i>Duration: {{ plan.get_duration_months_display }}</p>
+                            <p class="price"><i class="fas fa-tag me-2"></i>Price: Rs. {{ plan.price }}</p>
+                            {% if plan.description %}
+                                <p class="text-muted"><i class="fas fa-align-left me-2"></i>{{ plan.description }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Show QR Codes for Payment -->
+                        {% if qr_codes %}
+                        <div class="mb-5">
+                            <div class="qr-section-title">
+                                <i class="fas fa-qrcode"></i> Scan & Pay Securely
+                            </div>
+                            <div class="row justify-content-center">
+                                {% for qr in qr_codes %}
+                                <div class="col-md-12 text-center mb-4">
+                                    <div class="qr-code-card">
+                                        <div class="qr-code-glow">
+                                            <img src="{{ qr.qr_code_image.url }}" alt="QR Code" class="qr-code-img">
+                                        </div>
+                                        <div class="qr-method-label">{{ qr.get_payment_method_display }}</div>
+                                        <div class="qr-account-details">{{ qr.account_details }}</div>
+                                        <div class="qr-instructions">
+                                            <i class="fas fa-info-circle"></i> Please scan the QR code above and complete your payment.<br>
+                                            <i class="fas fa-upload"></i> Upload your payment screenshot below. You will be notified by email after admin confirmation.
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <label for="time_slot" class="form-label">
+                                    <i class="fas fa-clock me-2"></i>Choose Your Daily Session
+                                </label>
+                                <select name="time_slot" id="time_slot" class="form-select" required>
+                                    <option value="">Select a session</option>
+                                    <option value="{{ time_slots.morning.id }}">Morning Session – 6:00 AM to 10:00 AM</option>
+                                    <option value="{{ time_slots.afternoon.id }}">Afternoon Session – 12:00 PM to 4:00 PM</option>
+                                    <option value="{{ time_slots.evening.id }}">Evening Session – 5:00 PM to 9:00 PM</option>
+                                </select>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i> This will be your session throughout your subscription period. You can come at any time during your chosen session.
+                                </div>
+                            </div>
+
+                            <!-- Payment Submission Form Fields -->
+                            <div class="mb-4">
+                                <label for="id_payment_screenshot" class="form-label">
+                                    <i class="fas fa-upload me-2"></i>Upload Payment Screenshot
+                                </label>
+                                {{ form.payment_screenshot }}
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i> Upload a screenshot of your payment (optional if you enter transaction code).
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label for="id_transaction_code" class="form-label">
+                                    <i class="fas fa-hashtag me-2"></i>Transaction/Reference Code
+                                </label>
+                                {{ form.transaction_code }}
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i> Enter your transaction/reference code (optional if you upload screenshot).
+                                </div>
+                            </div>
+
+                            {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <h6 class="alert-heading"><i class="fas fa-exclamation-circle me-2"></i>Please correct the following errors:</h6>
+                                {{ form.errors }}
+                            </div>
+                            {% endif %}
+
+                            <div class="alert alert-info">
+                                <h6 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Important Notes:</h6>
+                                <ul>
+                                    <li><i class="fas fa-check-circle me-2"></i>You will have access to the gym for 2 hours every day during your chosen session</li>
+                                    <li><i class="fas fa-check-circle me-2"></i>The gym is closed on Saturdays</li>
+                                    <li><i class="fas fa-check-circle me-2"></i>Your subscription will start only after admin confirms your payment</li>
+                                    <li><i class="fas fa-check-circle me-2"></i>You can come at any time during your chosen session (Morning: 6 AM - 10 AM, Afternoon: 12 PM - 4 PM, Evening: 5 PM - 9 PM)</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-check-circle me-2"></i>Confirm Subscription
+                                </button>
+                                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times-circle me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

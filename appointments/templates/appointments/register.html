@@ -1,0 +1,162 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Register - Gym Appointment System{% endblock %}
+
+{% block body_class %}register-body{% endblock %}
+
+{% block extra_css %}
+<style>
+    .register-body {
+        background-image: url('https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        background-color: transparent !important;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    
+    .card {
+        background-color: rgba(30, 30, 30, 0.8); /* Darker semi-transparent */
+        color: white; /* Make text readable */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slightly darker shadow */
+    }
+    
+    
+    .btn-primary {
+        background-color: #d32f2f;
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background-color: #c62828;
+    }
+    
+    
+    a {
+        color: #388e3c; /* Neon green */
+    }
+    
+    a:hover {
+        color: #2e7d32; /* Darker shade on hover */
+    }
+    
+
+
+    /* Ensure the form container adapts to different screen sizes */
+.container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+/* Adjust card width for smaller screens */
+@media (max-width: 768px) {
+    .card {
+        margin: 10px;
+    }
+}
+
+/* Enhance input fields and buttons for touch devices */
+input[type="text"],
+input[type="password"],
+button[type="submit"] {
+    font-size: 1rem;
+    padding: 10px;
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid white;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+nav {
+    position: absolute;
+    top:0px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Create Account</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Username Field -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="form-text" style="color: white;">Required. 150 characters or fewer. Letters, digits, and @/./+/-/_ only.</div>
+                        
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="form-text" style="color: white;">Required. Please enter a valid email address.</div>
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div class="mb-3">
+                            <label for="password1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password1" name="password1" required>
+                            <div class="form-text" style="color: white;">
+                                Your password must:
+                                <ul>
+                                    <li>✅ At least 8 characters</li>
+                                    <li>⚠️ Not similar to your username</li>
+                                    <li>🔒 Not a commonly used password</li>
+                                    <li>❌ Not entirely numeric</li>
+                                    <li>🔡 Include letters & numbers</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Confirm Password Field -->
+                        <div class="mb-3">
+                            <label for="password2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" name="password2" required>
+                            <div class="form-text" style="color: white;">Enter the same password as before, for verification.</div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

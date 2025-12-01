@@ -1,0 +1,340 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Register - Gym Appointment System{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Open Sans', sans-serif;
+        line-height: 1.6;
+        color: #111;
+        background-color: #2c2b2b;
+      }
+      
+      nav {
+        margin-bottom: 0;
+      }
+      
+      .hero {
+        background: url('/static/img/pt1.avif') center/cover no-repeat;
+        height: 450px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 0;
+      }
+         
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+
+    .overlay {
+      
+      padding: 40px;
+      width: 100%;
+      color: #fff;
+    }
+    
+    .hero-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 48px;
+      color: #FFD700; /* Yellow */
+      margin-bottom: 20px;
+    }
+    
+    .hero-description {
+      font-size: 16px;
+      font-weight: 400;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    /* Trainers section */
+    .trainers {
+      padding: 60px 20px;
+      background-color: #fff;
+      text-align: center;
+    }
+    
+    .trainers-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+    
+    .trainers-description {
+      font-size: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+      color: #333;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+  
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #000;
+        color: white;
+      }
+  
+      .training-section {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 60px 20px;
+        background-color: #000;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .training-image {
+        flex: 1 1 500px;
+        max-width: 500px;
+        padding: 10px;
+      }
+  
+      .training-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+  
+      .training-content {
+        flex: 1 1 500px;
+        max-width: 600px;
+        padding: 10px;
+        text-align: center;
+      }
+  
+      .training-content h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+      }
+  
+      .training-content p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 10px;
+        color: #ccc;
+      }
+  
+      @media screen and (max-width: 768px) {
+        .training-section {
+          flex-direction: column;
+        }
+      }
+      .trainers-section {
+        background-color: #000;
+        padding: 50px 20px;
+        text-align: center;
+      }
+      
+      .trainers-heading {
+        font-size: 36px;
+        font-weight: bold;
+        color: yellow;
+        margin-bottom: 40px;
+      }
+      
+      .trainers-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+      
+      .trainer-card {
+        background-color: #111;
+        border-radius: 20px;
+        overflow: hidden;
+        width: 300px;
+        height: 450px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        position: relative;
+      }
+      
+      .trainer-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+      }
+      
+      .trainer-card:hover {
+        transform: scale(1.05);
+      }
+      
+      .trainer-info {
+        display: none;
+        background-color: rgba(0, 0, 0, 0.85);
+        color: white;
+        padding: 15px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: left;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+      
+      .trainer-info.show {
+        display: block;
+      }
+      
+      
+</style>
+
+<section class="hero">
+    <div class="overlay">
+      <h1 class="hero-title">PERSONAL TRAINING</h1>
+      <p class="hero-description">
+        At Devi’s Gym Nepal, Pokhara, we offer personalized training programs from our experienced personal gym trainers. 
+        So, you don't have to feel overwhelmed by the many experts advising on diet, exercise, and even sleep.
+      </p>
+    </div>
+  </section>
+
+  <section class="trainers">
+    <h2 style="text-align: center; font-size: 2.5rem; color: #000; font-weight: 700; margin: 40px 0; font-family: 'Arial', sans-serif;">
+        We Have Experienced Personal Trainers
+      </h2>
+      
+      
+    <p class="trainers-description">
+      At Devi’s Gym Nepal, we are dedicated to helping you achieve your fitness goals with our personalized training programs. 
+      Whether you’re looking to lose weight, build muscle, improve your overall fitness, or enhance your athletic performance, 
+      our experienced personal trainers are here to guide and support you every step of the way.
+    </p>
+  </section>
+
+
+  <section class="training-section">
+    <div class="training-image">
+      <img src="/static/img/pt2.jpg" alt="Trainer and client">
+    </div>
+    <div class="training-content">
+      <h2>Personalized Training</h2>
+      <p>Our personal training programs are tailored to meet your specific needs and objectives.</p>
+      <p>Our experienced personal trainers work closely with each member to develop a customized workout plan tailored to their individual fitness goals, fitness objectives and lifestyle.</p>
+    </div>
+  </section>
+
+
+  <section class="training-section">
+    <div class="training-content">
+      <h2 style="color: #FFD700;">Why Choose Devi's Gym For Personal Training?</h2>
+      <p>We set ourselves and our personal trainers apart from other gyms because:</p>
+      <ul class="training-list">
+        <li>Our trainers are experienced and certified, qualified to design safe and effective workout programs.</li>
+        <li>Our trainers work with you individually to understand your needs and create a personalized plan.</li>
+        <li>We motivate you, answer your questions, and help keep you on track throughout your fitness journey.</li>
+        <li>You’ll train in a clean, well-maintained, and encouraging environment.</li>
+      </ul>
+    </div>
+    <div class="training-image">
+      <img src="/static/img/pt3.jpg" alt="Personal Training Session">
+    </div>
+  </section>
+  
+
+  <section class="trainers-section">
+    <h2 class="trainers-heading">MEET OUR TRAINERS</h2>
+    <p class="trainers-subheading" style="color: #FFD700; margin-bottom: 40px; font-size: 1.1rem;">
+        Meet our team of certified personal trainers who are committed to helping you achieve your fitness goals.
+      </p>
+      
+
+    <div class="trainers-container">
+      
+      <div class="trainer-card" onclick="showInfo(0)">
+        <img src="/static/img/bp2.jpeg" alt="Trainer 1">
+        <div class="trainer-info" id="trainer-info-0">
+          <p><strong>Name:</strong> Pradip Baral</p>
+          <p><strong>Age:</strong> 22</p>
+          <p><strong>Experience:</strong> 3 years</p>
+          <p><strong>Phone Contact:</strong> 9746471643</p>
+          <p>
+            <strong>Follow:</strong>
+            <a href="https://www.facebook.com/pradipbaral123" target="_blank">
+              <i class="fab fa-facebook"></i> Facebook
+            </a> |
+            <a href="https://www.instagram.com/pradipbaral123/" target="_blank">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+          </p>
+        </div>
+      </div>
+  
+      <div class="trainer-card" onclick="showInfo(1)">
+        <img src="/static/img/gym8.jpg" alt="Trainer 2">
+        <div class="trainer-info" id="trainer-info-1">
+          <p><strong>Name:</strong> Amrit Gurung</p>
+          <p><strong>Age:</strong> 25</p>
+          <p><strong>Experience:</strong> 2 years</p>
+          <p><strong>Phone Contact:</strong> 9816665797</p>
+          <p>
+            <strong>Follow:</strong>
+            <a href="https://www.facebook.com/gurung.amrit.144364" target="_blank">
+              <i class="fab fa-facebook"></i> Facebook
+            </a> |
+            <a href="https://www.instagram.com/brijeshgurung29/" target="_blank">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+          </p>
+        </div>
+      </div>
+  
+      <!--<div class="trainer-card" onclick="showInfo(2)">
+        <img src="https://img.freepik.com/free-photo/woman-doing-workout-gym-with-trainer_1303-25221.jpg" alt="Trainer 3">
+        <div class="trainer-info" id="trainer-info-2">
+          <p><strong>Name:</strong> Ryan</p>
+          <p><strong>Age:</strong> 28</p>
+          <p><strong>Experience:</strong> 7 years</p>
+        </div>
+      </div>-->
+    
+      
+
+    </div>
+  </section>
+  
+  <script>
+    function showInfo(index) {
+      // First, hide all trainer info elements
+      const allInfos = document.querySelectorAll('.trainer-info');
+      allInfos.forEach(info => info.classList.remove('show'));
+  
+      // Then show the clicked one
+      const selectedInfo = document.getElementById('trainer-info-' + index);
+      if (selectedInfo) {
+        selectedInfo.classList.add('show');
+      }
+    }
+  </script>
+  
+  <!-- Modal -->
+  <div class="trainer-modal" id="trainerModal">
+    <div class="trainer-modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h3 id="trainerName"></h3>
+      <p id="trainerAge"></p>
+      <p id="trainerExperience"></p>
+    </div>
+  </div>
+  
+ 
+
+{% endblock %}

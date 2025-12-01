@@ -1,0 +1,189 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Register - Gym Appointment System{% endblock %}
+
+{% block content %}
+
+<div class="contact-container" style="margin-top: 100px; padding-bottom: 0px; margin-bottom: 0px;">
+    <h2 class="text-center my-3 contact-title">Contact US for Enquiry</h2>
+    <form action="/contact/" method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="name" style="color: white; font-weight: bold; font-size: 18px;">Name</label>
+
+            <input type="text" class="form-control custom-input" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email" style="color: white; font-weight: bold; font-size: 18px;">Email Address</label>
+            <input type="email" class="form-control custom-input" id="email" name="email" placeholder="name@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone" style="color: white; font-weight: bold; font-size: 18px;">Phone Number</label>
+            <div class="phone-container">
+                <select class="form-control custom-select" id="countryCode" name="countryCode" onchange="updatePhonePattern()">
+                    <option value="+977" data-length="10">+977 (Nepal)</option>
+                    <option value="+91" data-length="10">+91 (India)</option>
+                    <option value="+880" data-length="10">+880 (Bangladesh)</option>
+                    <option value="+92" data-length="10">+92 (Pakistan)</option>
+                    <option value="+94" data-length="9">+94 (Sri Lanka)</option>
+                    <option value="+960" data-length="7">+960 (Maldives)</option>
+                    <option value="+93" data-length="9">+93 (Afghanistan)</option>
+                    <option value="+95" data-length="9">+95 (Myanmar)</option>
+                    <option value="+65" data-length="8">+65 (Singapore)</option>
+                </select>
+                <input type="tel" class="form-control custom-input phone-input" id="phone" name="phone" 
+                       placeholder="Phone number" required>
+            </div>
+            <small id="phoneHelp" style="color: white; font-weight: bold; font-size: 12px;">Select your country and enter the correct phone number</small>
+        </div>   
+
+        <script>
+            function updatePhonePattern() {
+                const countrySelect = document.getElementById('countryCode');
+                const phoneInput = document.getElementById('phone');
+                const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+                const length = selectedOption.getAttribute('data-length');  
+                phoneInput.pattern = `\\d{${length}}`;
+                phoneInput.maxLength = length;
+                document.getElementById('phoneHelp').innerText = `Enter ${length} digits after the country code.`;
+            }
+        </script>
+
+        <div class="form-group">
+            <label for="desc" style="color: white; font-weight: bold; font-size: 18px;">Explain Your Concern</label>
+            <textarea class="form-control custom-textarea" id="desc" name="desc" rows="3" placeholder="Type your message..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success submit-btn">Submit</button>
+    </form>
+</div>
+
+<style>
+    /* New Background Image - Responsive */
+    body {
+        background: url('/static/img/contact.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        position: relative;
+    }
+    
+    /* Dark Overlay for Readability */
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+        z-index: -1;
+    }
+    
+    /* Contact Form Styling - Matching Image */
+    .contact-container {
+        max-width: 500px;
+        background: rgba(30, 30, 30, 0.9); /* Dark Gray - Matches Gym Aesthetic */
+        padding: 25px;
+        margin: 50px auto;
+        border-radius: 12px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+    }
+    
+    /* Form Title */
+    .contact-title {
+        font-size: 26px;
+        font-weight: bold;
+        color: #ffffff;
+        text-align: center;
+    }
+    
+    /* Input Fields - Modern Gym Look */
+    .custom-input, .custom-textarea, .custom-select {
+        border: 1px solid #444;
+        border-radius: 8px;
+        padding: 12px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1); /* Light Gray for Depth */
+        color: white;
+        transition: 0.3s;
+        font-size: 16px;
+    }
+    
+    .custom-input:focus, .custom-textarea:focus, .custom-select:focus {
+        border-color: #ffb703; /* Gym-inspired Yellow Highlight */
+        box-shadow: 0px 0px 10px rgba(255, 183, 3, 0.6);
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Placeholder Text */
+    ::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Phone Input Styling */
+    .phone-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    .custom-select {
+        flex: 0.4;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    
+    .phone-input {
+        flex: 0.6;
+    }
+    
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        background: #ffb703; /* Bold Gym Yellow */
+        border: none;
+        transition: all 0.3s ease-in-out;
+        color: black;
+    }
+    
+    .submit-btn:hover {
+        background: #ff8800; /* Darker Orange for Hover */
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        body {
+            background-size: cover; /* Ensures image fills the screen */
+            background-attachment: scroll; /* Prevents zoom-in issues */
+        }
+    
+        .contact-container {
+            width: 90%;
+            padding: 20px;
+        }
+    
+        .phone-container {
+            flex-direction: column;
+        }
+    
+        .custom-select, .phone-input {
+            width: 100%;
+        }
+    
+        .submit-btn {
+            font-size: 16px;
+        }
+    }
+   
+    
+</style>
+
+{% endblock %}

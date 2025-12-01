@@ -1,0 +1,88 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">My Appointments</h1>
+
+    {% if user.usersubscription_set.all %}
+        {% for subscription in user.usersubscription_set.all %}
+            {% if subscription.is_active %}
+            <div class="alert alert-info mb-4">
+                <h5 class="alert-heading">Active Subscription</h5>
+                <p>Plan: {{ subscription.plan.name }} ({{ subscription.plan.get_duration_months_display }})</p>
+                <p>Time Slot: 
+                    {% if subscription.time_slot.start_time|time:"H:i" == "06:00" %}
+                        Morning Session (6:00 AM to 10:00 AM)
+                    {% elif subscription.time_slot.start_time|time:"H:i" == "12:00" %}
+                        Afternoon Session (12:00 PM to 4:00 PM)
+                    {% elif subscription.time_slot.start_time|time:"H:i" == "17:00" %}
+                        Evening Session (5:00 PM to 9:00 PM)
+                    {% else %}
+                        {{ subscription.time_slot.start_time|time:"H:i" }} - {{ subscription.time_slot.end_time|time:"H:i" }}
+                    {% endif %}
+                </p>
+                <p>Valid until: {{ subscription.end_date }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if appointments %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.date|date:"F d, Y" }}</td>
+                        <td>
+                            {% if appointment.time_slot.start_time|time:"H:i" == "06:00" %}
+                                Morning Session (6:00 AM to 10:00 AM)
+                            {% elif appointment.time_slot.start_time|time:"H:i" == "12:00" %}
+                                Afternoon Session (12:00 PM to 4:00 PM)
+                            {% elif appointment.time_slot.start_time|time:"H:i" == "17:00" %}
+                                Evening Session (5:00 PM to 9:00 PM)
+                            {% else %}
+                                {{ appointment.time_slot.start_time|time:"H:i" }} - {{ appointment.time_slot.end_time|time:"H:i" }}
+                            {% endif %}
+                        </td>
+                        <td>{{ appointment.status|title }}</td>
+                        <td>
+                            {% if appointment.status != 'cancelled' %}
+                                <form method="post" action="{% url 'cancel_appointment' appointment.id %}" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this appointment?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted">Cancelled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">No Appointments Yet</h4>
+            <p>You haven't booked any appointments yet.</p>
+            <hr>
+            <a href="{% url 'book_appointment' %}" class="btn btn-primary">Book an Appointment</a>
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary">Book New Appointment</a>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

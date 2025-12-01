@@ -1,0 +1,329 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Book Your Gym Session{% endblock %}
+
+{% block content %}
+
+<style>
+    .alert-heading {
+        margin-top: 20px;
+    }
+    .alert p {
+        margin-top: 20px;
+    }
+    .alert {
+        padding-top: 30px;
+        border: 2px solid red;
+        background-color: #f8d7da;
+        overflow: visible;
+    }
+    /* Card styles */
+    .card {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        background-color: #fff;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        color: #2e86de;
+    }
+
+    .card-subtitle {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #888;
+    }
+
+    .card-text strong {
+        color: #27ae60;
+    }
+
+    /* Subscription features list */
+    .card ul {
+        padding-left: 0;
+        margin-top: 1rem;
+        text-align: left;
+    }
+
+    .card ul li {
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        color: #2f3640;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        background-color: #2e86de;
+        border-color: #2e86de;
+        font-weight: 600;
+        padding: 10px 15px;
+        border-radius: 30px;
+    }
+
+    .btn-primary:hover {
+        background-color: #1b4f72;
+        border-color: #1b4f72;
+    }
+
+    /* Custom card header */
+    .card-header.bg-primary {
+        background-color: #2e86de !important;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .card-header h3 {
+        margin: 0;
+    }
+
+    /* Subscription Plans Heading */
+    .subscription-heading {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, #2e86de, #27ae60);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Alert styles */
+    .alert-info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+        color: #0c5460;
+        margin-bottom: 2rem;
+    }
+
+    /* Wider subscription packages */
+    .subscription-container {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* Subscription Package Styles */
+    .subscription-packages {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem 0;
+    }
+    
+    .package-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .package-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .package-header {
+        background: linear-gradient(45deg, #2e86de, #27ae60);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .package-body {
+        padding: 1.5rem;
+    }
+    
+    .package-price {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2e86de;
+        text-align: center;
+        margin: 1rem 0;
+    }
+    
+    .package-features {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+    }
+    
+    .package-features li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .package-features li:last-child {
+        border-bottom: none;
+    }
+    
+    .package-button {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background: #2e86de;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+    }
+    
+    .package-button:hover {
+        background: #1b4f72;
+        color: white;
+    }
+
+    .subscription-col {
+        min-width: 350px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0" style="color: black;">Book Your Gym Session</h2>
+                </div>
+                <div class="card-body">
+                    {% if subscription %}
+                        <div class="mb-4">
+                            <h5>Your Subscription Details</h5>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Plan:</strong> {{ subscription.plan.name }}</p>
+                                    <p class="mb-1"><strong>Time Slot:</strong> 
+                                        {% if subscription.time_slot.start_time|time:"H:i" == "06:00" %}
+                                            Morning Session (6:00 AM to 10:00 AM)
+                                        {% elif subscription.time_slot.start_time|time:"H:i" == "12:00" %}
+                                            Afternoon Session (12:00 PM to 4:00 PM)
+                                        {% elif subscription.time_slot.start_time|time:"H:i" == "17:00" %}
+                                            Evening Session (5:00 PM to 9:00 PM)
+                                        {% else %}
+                                            {{ subscription.time_slot.start_time|time:"H:i" }} - {{ subscription.time_slot.end_time|time:"H:i" }}
+                                        {% endif %}
+                                    </p>
+                                    <p class="mb-1"><strong>Valid until:</strong> {{ subscription.end_date|date:"F d, Y" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Book Appointment</h5>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="date" class="form-label">Select Date</label>
+                                        <input type="date" class="form-control" id="date" name="date" 
+                                               min="{{ today|date:'Y-m-d' }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="time_slot" class="form-label">Select Time Slot</label>
+                                        <select class="form-select" id="time_slot" name="time_slot" required>
+                                            <option value="">Choose a time slot</option>
+                                            <optgroup label="Morning Session">
+                                                <option value="1">6:00 AM to 10:00 AM</option>
+                                            </optgroup>
+                                            <optgroup label="Afternoon Session">
+                                                <option value="2">12:00 PM to 4:00 PM</option>
+                                            </optgroup>
+                                            <optgroup label="Evening Session">
+                                                <option value="3">5:00 PM to 9:00 PM</option>
+                                            </optgroup>
+                                        </select>
+                                        <div class="form-text text-muted mt-2">
+                                            <i class="fas fa-info-circle"></i> You can arrive at any time within your selected session window. 
+                                            For example, if you select Morning Session, you can come anytime between 6:00 AM and 10:00 AM.
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning mb-4">
+                            <h4 class="alert-heading">No Active Subscription</h4>
+                            <p>You need an active subscription to book gym sessions. Please choose a subscription plan below:</p>
+                        </div>
+
+                        {% if show_subscription_packages %}
+                            <h2 class="text-center mb-4" style="
+                                font-size: 2.5rem;
+                                font-weight: 700;
+                                margin-bottom: 1.5rem;
+                                background: linear-gradient(90deg, #ff416c, #ff4b2b);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+                            ">
+                                Subscription Plans
+                            </h2>
+
+                            <div class="subscription-packages row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+                                {% for plan in plans %}
+                                <div class="col subscription-col">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-body">
+                                            <video class="card-img-top mb-3"
+                                                src="/static/img/hh.mp4" alt="{{ plan.name }}"
+                                                style="height:200px;object-fit:cover;"
+                                                autoplay loop muted>
+                                            </video>
+                                            <h5 class="card-title">{{ plan.name }}</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ plan.get_duration_months_display }}</h6>
+                                            <p class="card-text">
+                                                <strong class="fs-4">Rs.{{ plan.price }}</strong>
+                                                {% if plan.description %}<br>
+                                                <small>{{ plan.description }}</small>
+                                                {% endif %}
+                                            </p>
+                                            <ul class="list-unstyled" style="list-style: none; padding: 0; margin: 0; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.8; color: #333;">
+                                                <li style="padding-left: 24px; position: relative;">
+                                                    <span style="position: absolute; left: 0; color: green;">✓</span>
+                                                    Personal Training and free nutrition consultation
+                                                </li>
+                                                <li style="padding-left: 24px; position: relative;">
+                                                    <span style="position: absolute; left: 0; color: green;">✓</span>
+                                                    Choose your preferred time
+                                                </li>
+                                                <li style="padding-left: 24px; position: relative;">
+                                                    <span style="position: absolute; left: 0; color: green;">✓</span>
+                                                    Once a week Yoga Class and Steam Session
+                                                </li>
+                                                <li style="padding-left: 24px; position: relative;">
+                                                  <span style="position: absolute; left: 0; color: green;">✓</span>
+                                                  Strength and bulking training  by experts
+                                              </li>
+                                            </ul>     
+                                            <a href="{% url 'subscribe' plan.id %}" 
+                                            style="display: inline-block; width: 100%; padding: 14px 24px; background-color: #2c2c2c; color: #ffffff; text-align: center; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;"
+   onmouseover="this.style.backgroundColor='#1f1f1f'; this.style.color='#f1c40f'; this.style.boxShadow='0 6px 18px rgba(0, 0, 0, 0.2)'"
+   onmouseout="this.style.backgroundColor='#2c2c2c'; this.style.color='#ffffff'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.1)'"
+                                            class="btn btn-primary w-100">Subscribe Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,1480 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Home - Gym Appointment System{% endblock %}
+
+{% block content %}
+<!-- Add Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+ 
+
+
+
+  
+h2 {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Subscription Plans heading specific style */
+h2.text-center {
+  color: #000000;  /* Pure black color */
+  font-weight: 800;  /* Extra bold */
+}
+
+/* Card styles */
+.card {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 15px;
+  background-color: #fff;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card .card-img-top {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  color: #2e86de;
+}
+
+.card-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #888;
+}
+
+.card-text strong {
+  color: #27ae60;
+}
+
+/* Subscription features list */
+.card ul {
+  padding-left: 0;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.card ul li {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #2f3640;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #2e86de;
+  border-color: #2e86de;
+  font-weight: 600;
+  padding: 10px 15px;
+  border-radius: 30px;
+}
+
+.btn-primary:hover {
+  background-color: #1b4f72;
+  border-color: #1b4f72;
+}
+
+.btn-outline-primary {
+  border-radius: 30px;
+  font-weight: 500;
+}
+
+/* Alert style for no subscription */
+.alert-warning {
+  background-color:rgb(102, 80, 10);
+  border-color: #ffeeba;
+  color: #856404;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+}
+
+.alert h4 {
+  font-weight: bold;
+}
+
+/* Custom card header */
+.card-header.bg-primary {
+  background-color: #2e86de !important;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .card-body {
+      padding: 1rem;
+  }
+
+  .card-title {
+      font-size: 1.3rem;
+  }
+}
+
+.review-section {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  font-family: Arial;
+}
+
+.stars {
+  display: flex;
+  cursor: pointer;
+}
+
+.star {
+  font-size: 30px;
+  color: gray;
+  transition: color 0.3s;
+}
+
+.star.selected,
+.star:hover,
+.star:hover ~ .star {
+  color: gold;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.review-display {
+  margin-top: 20px;
+  padding: 10px;
+  background:rgb(49, 27, 27);
+  border-radius: 8px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background: #28a745;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #218838;
+}
+
+.trainers-section {
+  background-color: #000;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.trainers-heading {
+  font-size: 36px;
+  font-weight: bold;
+  color: yellow;
+  margin-bottom: 40px;
+}
+
+.trainers-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.trainer-card {
+  background-color: #111;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 300px;
+  height: 450px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.trainer-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.trainer-card:hover {
+  transform: scale(1.05);
+}
+
+.trainer-info {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 15px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: left;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.trainer-info.show {
+  display: block;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color:rgb(9, 8, 10);
+  color: #222;
+}
+
+
+
+.why-section {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 40px 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.why-section h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  color: #000;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+}
+
+.why-box {
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.why-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.why-icon {
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.why-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.why-text {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .why-section h2 {
+    font-size: 28px;
+  }
+
+  .why-icon {
+    font-size: 36px;
+  }
+}
+
+body {
+  background-color: black;
+}
+.gym-section {
+  background: #fff !important;
+  padding: 30px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.map-container {
+  flex: 2;
+}
+.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: 0;
+  border-radius: 6px;
+}
+.right-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.gym-title {
+  color: #ffcc00;
+  font-weight: bold;
+  font-size: 24px;
+}
+.direction-btn {
+  background-color: #ffcc00;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.direction-btn:hover {
+  background-color: #e6b800;
+}
+
+body {
+  background-color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+.gallery-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 60px 0 30px;
+  color: #000;
+}
+.carousel-inner {
+  display: flex;
+}
+.carousel-item {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  transition: transform 0.6s ease;
+}
+.carousel-item img {
+  width: 100%;
+  height: 500px;
+  max-width: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+.carousel-item img:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+/* Enhanced Gallery Carousel Styles */
+.gallery-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-title {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+    color: #fff;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.gallery-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.gallery-carousel {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.gallery-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.95);
+}
+
+.gallery-slide.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.9);
+    transition: filter 0.3s ease;
+}
+
+.gallery-slide.active img {
+    filter: brightness(1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    padding: 30px 20px;
+    color: white;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-slide.active .gallery-overlay {
+    transform: translateY(0);
+}
+
+.gallery-overlay h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+.gallery-overlay p {
+    font-size: 1.1rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+.gallery-slide.active .gallery-overlay h3,
+.gallery-slide.active .gallery-overlay p {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.gallery-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.gallery-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gallery-dot.active {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(255, 65, 108, 0.5);
+}
+
+@media (max-width: 768px) {
+    .gallery-carousel {
+        height: 350px;
+    }
+    
+    .gallery-title {
+        font-size: 2.2rem;
+    }
+    
+    .gallery-overlay h3 {
+        font-size: 1.5rem;
+    }
+    
+    .gallery-overlay p {
+        font-size: 1rem;
+    }
+}
+
+/* Enhanced Gym Introduction Styles */
+.gym-section {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.gym-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.gym-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.gym-title {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    color: #000;
+    animation: fadeInUp 1s ease-out;
+}
+
+.gym-subtitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 30px;
+    animation: fadeInUp 1s ease-out 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.gym-description {
+    color: #e0e0e0;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    animation: fadeInUp 1s ease-out 0.4s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.gym-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+    animation: fadeInUp 1s ease-out 0.6s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.highlight-item {
+    background: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.highlight-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.highlight-icon {
+    font-size: 2.5rem;
+    color: #ff416c;
+    margin-bottom: 20px;
+}
+
+.highlight-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.highlight-text {
+    color: #e0e0e0;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gym-image {
+    position: relative;
+    margin-top: 50px;
+    animation: fadeIn 1s ease-out 0.8s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.gym-image img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.gym-image img:hover {
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .gym-title {
+        font-size: 2.5rem;
+    }
+    
+    .gym-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .gym-description {
+        font-size: 1rem;
+    }
+    
+    .highlight-item {
+        padding: 20px;
+    }
+}
+
+/* Update WhatsApp float styles */
+.whatsapp-container {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    gap: 10px;
+}
+
+.help-text {
+    background-color: white;
+    color: #333;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
+}
+
+.whatsapp-container:hover .help-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.whatsapp-float {
+    position: relative;
+    background-color: #25D366;
+    color: white !important;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 35px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    background-color: #128C7E;
+    transform: scale(1.1);
+    color: white !important;
+    text-decoration: none;
+}
+
+.whatsapp-float i {
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.whatsapp-float {
+    animation: float 3s ease-in-out infinite;
+}
+</style>
+
+<!-- Add WhatsApp Button with Help Text -->
+<div class="whatsapp-container">
+    <div class="help-text">Need Help?</div>
+    <a href="https://wa.me/9779746471643" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</div>
+
+{% if user.is_authenticated %}
+
+
+<div style="position: relative; width: 100%; height: 100vh; overflow: hidden;">
+  <!-- Background video -->
+  <video autoplay muted loop playsinline
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
+    <source src="/static/img/hhh.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+
+      {% if user_subscription %}
+          <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                  <h3>Your Active Subscription</h3>
+              </div>
+              <div class="card-body">
+                  <p><strong>Plan:</strong> {{ user_subscription.plan.name }} ({{ user_subscription.plan.get_duration_months_display }})</p>
+                  <p><strong>Time Slot:</strong> {{ user_subscription.time_slot }}</p>
+                  <p><strong>Valid until:</strong> {{ user_subscription.end_date }}</p>
+                  <div class="mt-3">
+                      <a href="{% url 'book_appointment' %}" class="btn btn-primary">Book Your Session</a>
+                      <a href="{% url 'my_appointments' %}" class="btn btn-outline-primary">View My Appointments</a>
+                  </div>
+              </div>
+          </div>
+      {% else %}
+          <div class="alert alert-warning text-center">
+            <h4 class="alert-heading" style="color: black;">No Active Subscription</h4>
+            <p style="margin-top: 30px; color: black;">Please choose a subscription plan below to start booking your gym sessions.</p>
+
+            
+          </div>
+      {% endif %}
+      
+      <h2 class="text-center mb-4" style="
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: black;
+">
+Subscription Plans
+</h2>
+
+      <div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center">
+          {% for plan in subscription_plans %}
+          <div class="col">
+              <div class="card h-100 text-center">
+                  <div class="card-body">
+                    <video class="card-img-top mb-3"
+           src="/static/img/hh.mp4" alt="{{ plan.name }}"
+           style="height:200px;object-fit:cover;"
+           autoplay muted loop playsinline></video>
+                    
+                    <h5 class="card-title">{{ plan.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ plan.get_duration_months_display }}</h6>
+                    <p class="card-text">
+                        <strong class="fs-4">Rs.{{ plan.price }}</strong>
+                        {% if plan.description %}<br>
+                        <small>{{ plan.description }}</small>
+                        {% endif %}
+                    </p>
+                    <ul class="list-unstyled" style="list-style: none; padding: 0; margin: 0; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.8; color: #333;">
+                      <li style="padding-left: 24px; position: relative;">
+                          <span style="position: absolute; left: 0; color: green;">✓</span>
+                          Personal Training and free nutrition consultation
+                      </li>
+                      <li style="padding-left: 24px; position: relative;">
+                          <span style="position: absolute; left: 0; color: green;">✓</span>
+                          Choose your preferred time
+                      </li>
+                      <li style="padding-left: 24px; position: relative;">
+                          <span style="position: absolute; left: 0; color: green;">✓</span>
+                          Once a week Yoga Class and Steam Session
+                      </li>
+                      <li style="padding-left: 24px; position: relative;">
+                        <span style="position: absolute; left: 0; color: green;">✓</span>
+                        Strength and bulking training  by experts
+                    </li>
+                  </ul>                  
+                  <a href="{% url 'subscribe' plan.id %}"
+   style="display: inline-block; width: 100%; padding: 14px 24px; background-color: #2c2c2c; color: #ffffff; text-align: center; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;"
+   onmouseover="this.style.backgroundColor='#1f1f1f'; this.style.color='#f1c40f'; this.style.boxShadow='0 6px 18px rgba(0, 0, 0, 0.2)'"
+   onmouseout="this.style.backgroundColor='#2c2c2c'; this.style.color='#ffffff'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.1)'">
+   Subscribe Now
+</a>       
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+
+      <div class="container">
+        <h1 style="text-align: center; font-weight: bold; font-size: 40px; margin-bottom: 30px;">DEVI'S GYM NEPAL</h1>
+    
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 style="font-weight: bold;">Your No.1 Choice For Fitness In Pokhara</h4>
+            <p style="margin-top: 15px;">
+              Welcome to Devi's Gym Nepal, your local fitness center in Pokhara! We are the first international franchise gym of Nepal opened in 2018, with world-class facilities, premium gym equipment and expert trainers. Our commitment is to help you achieve your fitness goals.
+            </p>
+            <p>
+              At Devi's Gym Nepal, we understand that fitness is not one-size-fits-all. That's why we offer a wide range of fitness classes designed from high-intensity interval training to yoga, ashtanga yoga. We also hold hygiene and sanitation in the highest regard, ensuring immaculate surroundings to safeguard your health and wellness. Plus, with our exclusive free international pass, you gain access to any Gold Gym worldwide.
+            </p>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="/static/img/strength3.jpg" alt="Gold's Gym Nepal" class="img-fluid rounded" 
+   style="max-width: 100%; max-height: 400px; border: 1px solid #ddd; margin-left: 80px;">
+          </div>
+        </div>
+      </div>
+    
+     
+      <section class="gallery-section">
+          <h2 class="gallery-title">OUR GALLERY</h2>
+          <div class="gallery-container">
+              <div class="gallery-carousel">
+                  <div class="gallery-slide active">
+                      <img src="/static/img/gym2.jpg" alt="Gym Facility" loading="eager">
+                      <div class="gallery-overlay">
+                          <h3>State-of-the-Art Equipment</h3>
+                          <p>Premium fitness machines for your perfect workout experience</p>
+                      </div>
+                  </div>
+                  <div class="gallery-slide">
+                      <img src="/static/img/gym3.jpg" alt="Training Area" loading="eager">
+                      <div class="gallery-overlay">
+                          <h3>Spacious Training Area</h3>
+                          <p>Perfect environment for your fitness journey</p>
+                      </div>
+                  </div>
+                  <div class="gallery-slide">
+                      <img src="/static/img/gym4.jpg" alt="Cardio Zone" loading="eager">
+                      <div class="gallery-overlay">
+                          <h3>Cardio Zone</h3>
+                          <p>Modern cardio equipment for heart health</p>
+                      </div>
+                  </div>
+                  <div class="gallery-slide">
+                      <img src="/static/img/gym5.jpg" alt="Weight Training" loading="eager">
+                      <div class="gallery-overlay">
+                          <h3>Weight Training</h3>
+                          <p>Comprehensive strength training facilities</p>
+                      </div>
+                  </div>
+                  <div class="gallery-slide">
+                      <img src="/static/img/gym6.jpg" alt="Group Classes" loading="eager">
+                      <div class="gallery-overlay">
+                          <h3>Group Classes</h3>
+                          <p>Join our energetic group sessions</p>
+                      </div>
+                  </div>
+                  <div class="gallery-slide">
+                      <img src="/static/img/gym7.jpg" alt="Personal Training" loading="eager">
+                      <div class="gallery-overlay">
+                          <h3>Personal Training</h3>
+                          <p>Expert guidance for your fitness goals</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="gallery-nav">
+                  <div class="gallery-dot active" onclick="showSlide(0)"></div>
+                  <div class="gallery-dot" onclick="showSlide(1)"></div>
+                  <div class="gallery-dot" onclick="showSlide(2)"></div>
+                  <div class="gallery-dot" onclick="showSlide(3)"></div>
+                  <div class="gallery-dot" onclick="showSlide(4)"></div>
+                  <div class="gallery-dot" onclick="showSlide(5)"></div>
+              </div>
+          </div>
+      </section>
+
+      <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll('.gallery-slide');
+      const dots = document.querySelectorAll('.gallery-dot');
+      let slideInterval;
+
+      function showSlide(index) {
+          // Hide all slides
+          slides.forEach(slide => {
+              slide.classList.remove('active');
+          });
+          dots.forEach(dot => {
+              dot.classList.remove('active');
+          });
+          
+          // Show selected slide
+          slides[index].classList.add('active');
+          dots[index].classList.add('active');
+          currentSlide = index;
+      }
+
+      function nextSlide() {
+          currentSlide = (currentSlide + 1) % slides.length;
+          showSlide(currentSlide);
+      }
+
+      function startAutoSlide() {
+          slideInterval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
+      }
+
+      function stopAutoSlide() {
+          clearInterval(slideInterval);
+      }
+
+      // Start auto-sliding
+      startAutoSlide();
+
+      // Pause auto-sliding when user interacts with dots
+      dots.forEach(dot => {
+          dot.addEventListener('mouseenter', stopAutoSlide);
+          dot.addEventListener('mouseleave', startAutoSlide);
+      });
+
+      // Resume auto-sliding when mouse leaves the carousel
+      document.querySelector('.gallery-carousel').addEventListener('mouseleave', startAutoSlide);
+      </script>
+
+      <section class="trainers-section">
+        <h2 class="trainers-heading">MEET OUR TRAINERS</h2>
+        <div class="trainers-container">
+          
+          <div class="trainer-card" onclick="showInfo(0)">
+            <img src="/static/img/bp2.jpeg" alt="Trainer 1">
+            <div class="trainer-info" id="trainer-info-0">
+              <p><strong>Name:</strong> Pradip Baral</p>
+              <p><strong>Age:</strong> 22</p>
+              <p><strong>Experience:</strong> 3 years</p>
+              <p><strong>Phone Contact:</strong> 9746471643</p>
+              <p>
+                <strong>Follow:</strong>
+                <a href="https://www.facebook.com/pradipbaral123" target="_blank">
+                  <i class="fab fa-facebook"></i> Facebook
+                </a> |
+                <a href="https://www.instagram.com/pradipbaral123/" target="_blank">
+                  <i class="fab fa-instagram"></i> Instagram
+                </a>
+              </p>
+            </div>
+          </div>
+      
+          <div class="trainer-card" onclick="showInfo(1)">
+            <img src="/static/img/gym8.jpg" alt="Trainer 2">
+            <div class="trainer-info" id="trainer-info-1">
+              <p><strong>Name:</strong> Amrit Gurung</p>
+              <p><strong>Age:</strong> 25</p>
+              <p><strong>Experience:</strong> 2 years</p>
+              <p><strong>Phone Contact:</strong> 9816665797</p>
+              <p>
+                <strong>Follow:</strong>
+                <a href="https://www.facebook.com/gurung.amrit.144364" target="_blank">
+                  <i class="fab fa-facebook"></i> Facebook
+                </a> |
+                <a href="https://www.instagram.com/brijeshgurung29/" target="_blank">
+                  <i class="fab fa-instagram"></i> Instagram
+                </a>
+              </p>
+            </div>
+          </div>
+      
+          <!--<div class="trainer-card" onclick="showInfo(2)">
+            <img src="https://img.freepik.com/free-photo/woman-doing-workout-gym-with-trainer_1303-25221.jpg" alt="Trainer 3">
+            <div class="trainer-info" id="trainer-info-2">
+              <p><strong>Name:</strong> Ryan</p>
+              <p><strong>Age:</strong> 28</p>
+              <p><strong>Experience:</strong> 7 years</p>
+            </div>
+          </div>-->
+        
+          
+
+        </div>
+      </section>
+      
+      <script>
+        function showInfo(index) {
+          // First, hide all trainer info elements
+          const allInfos = document.querySelectorAll('.trainer-info');
+          allInfos.forEach(info => info.classList.remove('show'));
+      
+          // Then show the clicked one
+          const selectedInfo = document.getElementById('trainer-info-' + index);
+          if (selectedInfo) {
+            selectedInfo.classList.add('show');
+          }
+        }
+      </script>
+      
+      <section class="why-section">
+        <h2>WHY CHOOSE DEVI'S GYM NEPAL</h2>
+        <div class="why-grid">
+          <div class="why-box">
+            <div class="why-icon"><i class="fas fa-house"></i></div>
+            <div class="why-title">Clean Environment</div>
+            <div class="why-text">
+              Sanitization and proper hygiene are our top priorities. We sanitize the gym area every day, including locker, steam, and sauna rooms.
+            </div>
+          </div>
+          <div class="why-box">
+            <div class="why-icon"><i class="fas fa-dumbbell"></i></div>
+            <div class="why-title">World Class Equipment</div>
+            <div class="why-text">
+              Devi's Gym Nepal is equipped with top-tier gym machines and professional trainers to help you stay fit and injury-free.
+            </div>
+          </div>
+          <div class="why-box">
+            <div class="why-icon"><i class="fas fa-user-graduate"></i></div>
+            <div class="why-title">Certified Trainers</div>
+            <div class="why-text">
+              Our experienced trainers help you achieve your fitness goals effectively and safely, with personalized guidance.
+            </div>
+          </div>
+          <div class="why-box">
+            <div class="why-icon"><i class="fas fa-ticket-alt"></i></div>
+            <div class="why-title">Free Pass</div>
+            <div class="why-text">
+              Members get a 14-day global pass to any Gold's Gym location, along with expert guidance from certified professionals.
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <div class="container py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%); border-radius: 20px; padding: 60px !important; margin: 80px auto; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+        <h2 class="text-center mb-4" style="color: #2c3e50; font-size: 2.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">HOW WE DELIVER RESULTS</h2>
+        <hr style="width: 100px; margin: 0 auto 50px; border: 3px solid #3498db; opacity: 0.8;">
+    
+        <!-- Step 1 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="https://img.icons8.com/emoji/48/calendar-emoji.png" alt="Join Gym" style="width: 60px; height: 60px; margin-bottom: 15px;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">1. Join the Gym</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <i class="fas fa-chevron-down" style="color: #3498db; font-size: 2rem; animation: bounce 2s infinite;"></i>
+          </div>
+        </div>
+    
+        <!-- Steps 2 and 3 -->
+        <div class="row mb-5 text-center">
+          <div class="col-md-6">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="/static/img/h11.jpg" 
+     alt="Discuss Goals" 
+     style="width: 100px; height: 100px; border-radius: 10px; display: block; margin: 0 auto 15px; object-fit: cover;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">2. Discuss Goals & Experiences</h5>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="/static/img/h12.webp" alt="Assessment"
+              style="width: 100px; height: 100px; border-radius: 10px; display: block; margin: 0 auto 15px; object-fit: cover;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">3. Physical Fitness Assessment</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 2 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <i class="fas fa-chevron-down" style="color: #3498db; font-size: 2rem; animation: bounce 2s infinite;"></i>
+          </div>
+        </div>
+    
+        <!-- Step 4 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="https://img.icons8.com/emoji/48/red-apple.png" alt="Plan Design" style="width: 60px; height: 60px; margin-bottom: 15px;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">4. Plan Design</h5>
+              <small style="color: #666; font-size: 0.9rem;">(Custom workout and nutrition)</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 3 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <i class="fas fa-chevron-down" style="color: #3498db; font-size: 2rem; animation: bounce 2s infinite;"></i>
+          </div>
+        </div>
+    
+        <!-- Step 5 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="/static/img/h13.avif" 
+              alt="Train"
+              style="width: 100px; height: 100px; border-radius: 10px; display: block; margin: 0 auto 15px; object-fit: cover;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">5. Train</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 4 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <i class="fas fa-chevron-down" style="color: #3498db; font-size: 2rem; animation: bounce 2s infinite;"></i>
+          </div>
+        </div>
+    
+        <!-- Steps 6 and 7 -->
+        <div class="row mb-5 text-center">
+          <div class="col-md-6">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="https://img.icons8.com/emoji/48/busts-in-silhouette.png" alt="Feedback" style="width: 60px; height: 60px; margin-bottom: 15px;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">6. Take Feedback</h5>
+              <small style="color: #666; font-size: 0.9rem;">(Every 3–4 weeks)</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="/static/img/h14.jpg"
+               alt="Customize"
+               style="width: 100px; height: 100px; border-radius: 10px; display: block; margin: 0 auto 15px; object-fit: cover;" >
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">7. Customize Plan</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 5 -->
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <i class="fas fa-chevron-down" style="color: #3498db; font-size: 2rem; animation: bounce 2s infinite;"></i>
+          </div>
+        </div>
+    
+        <!-- Step 8 -->
+        <div class="row text-center">
+          <div class="col">
+            <div style="display:inline-block; padding:30px; background:rgba(255,255,255,0.95); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+              <img src="https://img.icons8.com/emoji/48/flexed-biceps.png" alt="Results" style="width: 60px; height: 60px; margin-bottom: 15px;">
+              <h5 class="mt-2" style="color: #2c3e50; font-weight: 600; font-size: 1.2rem;">8. Get Results!</h5>
+            </div>
+          </div>
+        </div>
+    
+      </div>
+
+      <style>
+        /* Add hover effects to the cards */
+        .container .row .col div:hover {
+          transform: translateY(-10px);
+        }
+
+        /* Bounce animation for arrows */
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+          }
+          40% {
+            transform: translateY(-10px);
+          }
+          60% {
+            transform: translateY(-5px);
+          }
+        }
+      </style>
+
+      <div class="container my-5">
+        <div class="gym-section" style="background: #fff; padding: 50px 0 0 0; border-radius: 0;">
+          <!-- Left: Map -->
+          <div class="map-container">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3538.9271601347874!2d83.95667937473013!3d28.18940618257909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399595004b6a7f93%3A0xf313729e7fdb843b!2sDevi's%20Gym%20and%20Cafe!5e0!3m2!1sen!2snp!4v1713526911414!5m2!1sen!2snp" 
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+    
+          <!-- Right: Info -->
+          <div class="right-side">
+            <h2 class="gym-title">VISIT DEVI'S GYM AND CAFE</h2>
+            <a href="https://www.google.com/maps/place/Devi's+Gym+and+Cafe/@28.1894062,83.9566794,17z/data=!4m14!1m7!3m6!1s0x399595004b6a7f93:0xf313729e7fdb843b!2sDevi's+Gym+and+Cafe!8m2!3d28.1894062!4d83.9592543!16s%2Fg%2F11v_9_66jl!3m5!1s0x399595004b6a7f93:0xf313729e7fdb843b!8m2!3d28.1894062!4d83.9592543!16s%2Fg%2F11v_9_66jl?entry=ttu" 
+               target="_blank">
+              <button class="direction-btn mt-3">Get Direction</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+
+
+    <!-- Customer Feedback Section -->
+    <div style="
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+    color: #222;
+    width: 100vw;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    border-top: 4px solid #ffb703;
+    border-radius: 0; /* No bottom radius */
+    box-shadow: none;
+">
+    <div style="
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        align-items: stretch;
+        justify-content: space-between;
+        background: rgba(255,255,255,0.85);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        border-radius: 0;
+        padding: 0;
+        gap: 0;
+    ">
+        <!-- Feedback Form -->
+        <div style="
+            flex: 1.2;
+            padding: 48px 32px 32px 32px;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            border-radius: 0;
+            box-shadow: 0 2px 12px rgba(255,183,3,0.08);
+        ">
+          <h1 style="
+              text-align: center;
+              font-size: 2.2rem;
+              margin-bottom: 18px;
+              color: #ffb703;
+              font-weight: 900;
+              letter-spacing: 1px;
+              text-shadow: 1px 1px 0 #fff, 0 2px 8px #ffb70333;
+          ">
+            Customer Feedback & Suggestion
+          </h1>
+          <div style="height: 3px; background: linear-gradient(90deg, #ffb703, #fda085); margin: 0 auto 18px auto; width: 60px; border-radius: 2px;"></div>
+          <p style="text-align: center; margin-bottom: 24px; color: #444; font-size: 1.1rem;">
+            We value your experience! Please share your feedback with us.
+          </p>
+          <form method="POST" action="/newsletter-signup/">
+            {% csrf_token %}
+            <div style="margin-bottom: 18px;">
+              <label for="first_name" style="font-weight: 700; margin-bottom: 6px; display: block; color: #ffb703;">First Name*</label>
+              <input type="text" id="first_name" name="first_name" placeholder="First Name*" required
+                style="width: 100%; padding: 12px; border: 1.5px solid #ffb703; border-radius: 8px; background: #fffbe6; color: #222; font-size: 1rem;"/>
+            </div>
+            <div style="margin-bottom: 18px;">
+              <label for="last_name" style="font-weight: 700; margin-bottom: 6px; display: block; color: #ffb703;">Last Name*</label>
+              <input type="text" id="last_name" name="last_name" placeholder="Last Name*" required
+                style="width: 100%; padding: 12px; border: 1.5px solid #ffb703; border-radius: 8px; background: #fffbe6; color: #222; font-size: 1rem;"/>
+            </div>
+            <div style="margin-bottom: 18px;">
+              <label for="email" style="font-weight: 700; margin-bottom: 6px; display: block; color: #ffb703;">Email Address*</label>
+              <input type="email" id="email" name="email" placeholder="Email Address*" required
+                style="width: 100%; padding: 12px; border: 1.5px solid #ffb703; border-radius: 8px; background: #fffbe6; color: #222; font-size: 1rem;"/>
+            </div>
+            <div style="margin-bottom: 24px;">
+              <label for="message" style="font-weight: 700; margin-bottom: 6px; display: block; color: #ffb703;">Your Suggestion and Feedback</label>
+              <textarea id="message" name="message" placeholder="Your Suggestion and Feedback" rows="4"
+                style="width: 100%; padding: 12px; border: 1.5px solid #ffb703; border-radius: 8px; background: #fffbe6; color: #222; font-size: 1rem;"></textarea>
+            </div>
+            <button type="submit"
+              style="background: linear-gradient(90deg, #ffb703, #fda085); color: #fff; font-weight: bold; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; box-shadow: 0 2px 8px #ffb70333; transition: background 0.2s;">
+              SUBMIT
+            </button>
+          </form>
+        </div>
+        <!-- Images -->
+        <div style="
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            background: transparent;
+            border-radius: 0;
+            padding: 48px 16px 32px 16px;
+        ">
+          <img src="/static/img/h15.jpg" alt="Gym Image 1"
+            style="width: 92%; max-height: 44%; border-radius: 16px; box-shadow: 0 6px 24px rgba(255,183,3,0.18); object-fit: cover; border: 2px solid #ffb703;">
+          <img src="/static/img/h16.jpg" alt="Gym Image 2"
+            style="width: 92%; max-height: 44%; border-radius: 16px; box-shadow: 0 6px 24px rgba(255,183,3,0.18); object-fit: cover; border: 2px solid #ffb703;">
+        </div>
+    </div>
+</div>
+
+
+
+ {% else %}
+
+  <div class="text-center text-white d-flex align-items-center justify-content-center sliding-background"
+ style="
+    min-height: 120vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    top: 0;
+    box-sizing: border-box;
+    background-color: #111;
+ ">
+
+<!-- Optional Overlay for better text visibility -->
+<div style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+"></div>
+
+<div style="
+    position: relative;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 600px;
+">
+    <p class="lead mb-4" style=" margin-bottom: 40px">Please login or register to view our subscription plans and book appointments.<br>
+                                  📧 baralanup832@gmail.com<br>
+                                  📞 +977 9846880980 </p>
+    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3"
+       style="
+            padding: 0.8rem 3rem;
+            background: linear-gradient(135deg, #00aaff, #00ffaa);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            color: white;
+            border: none;
+        "
+       onmouseover="this.style.transform='scale(1.05)';"
+       onmouseout="this.style.transform='scale(1)';">
+        Login
+    </a>
+    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg"
+       style="
+            padding: 0.8rem 3rem;
+            border: 2px solid #ffffff;
+            background: transparent;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            color: white;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+        "
+       onmouseover="this.style.backgroundColor='#ffffff'; this.style.color='#333';"
+       onmouseout="this.style.backgroundColor='transparent'; this.style.color='white';">
+        Register
+    </a>
+</div>
+</div>
+
+<style>
+  .sliding-background {
+    animation: slideImages 30s infinite ease-in-out;
+    background-size: 100% 100%; /* cover full width and height */
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+@keyframes slideImages {
+    0% {
+        background-image: url('/static/img/h5.jpg');
+    }
+    25% {
+        background-image: url('/static/img/h2.jpeg');
+    }
+    50% {
+        background-image: url('/static/img/h3.jpg');
+    }
+    75% {
+        background-image: url('/static/img/h4.jpg');
+    }
+    100% {
+        background-image: url('/static/img/h1.jpg');
+    }
+}
+</style>
+
+
+
+ {% endif %}
+ 
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

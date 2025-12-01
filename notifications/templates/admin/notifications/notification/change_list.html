@@ -1,0 +1,256 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'admin:send-notification' %}" class="addlink">
+            <i class="fas fa-bell"></i> Send Notification to All Users
+        </a>
+    </li>
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Total Notifications</h3>
+                <p>{{ total_notifications }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Active Users</h3>
+                <p>{{ active_users }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Read Rate</h3>
+                <p>{{ read_rate }}%</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Recent Activity</h3>
+                <p>{{ recent_activity }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification-timeline">
+        <h2>Recent Notifications</h2>
+        <div class="timeline">
+            {% for notification in recent_notifications %}
+            <div class="timeline-item">
+                <div class="timeline-date">{{ notification.created_at|date:"M d, Y" }}</div>
+                <div class="timeline-content">
+                    <span class="notification-type-badge {{ notification.notification_type }}">
+                        {{ notification.get_notification_type_display }}
+                    </span>
+                    <h4>{{ notification.title }}</h4>
+                    <p>{{ notification.message|truncatechars:100 }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {{ block.super }}
+    <style>
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .stat-info h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-info p {
+            margin: 5px 0 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .notification-timeline {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .notification-timeline h2 {
+            margin: 0 0 20px;
+            color: var(--primary);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--secondary);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid white;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            background: var(--secondary);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .timeline-content h4 {
+            margin: 0 0 10px;
+            color: var(--primary);
+        }
+
+        .timeline-content p {
+            margin: 0;
+            color: #666;
+        }
+
+        .changelist-form .results {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .changelist-form .results th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+
+        .changelist-form .results td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .changelist-form .results tr:hover {
+            background: var(--secondary);
+        }
+
+        .notification-type-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .notification-type-badge.holiday { background: var(--warning); }
+        .notification-type-badge.event { background: var(--accent); }
+        .notification-type-badge.update { background: var(--primary); }
+        .notification-type-badge.general { background: var(--success); }
+
+        .action-checkbox {
+            margin-right: 10px;
+        }
+
+        .paginator {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .paginator a:link, .paginator a:visited {
+            color: var(--primary);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .paginator a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .paginator .this-page {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %} 

@@ -1,0 +1,147 @@
+{% if notifications %}
+<div class="notification-overlay">
+    {% for notification in notifications %}
+    <div class="notification-card" id="notification-{{ notification.id }}">
+        <div class="notification-header">
+            <span class="notification-type badge {% if notification.notification.notification_type == 'holiday' %}bg-success{% elif notification.notification.notification_type == 'event' %}bg-primary{% elif notification.notification.notification_type == 'update' %}bg-info{% else %}bg-secondary{% endif %}">
+                {{ notification.notification.get_notification_type_display }}
+            </span>
+            <button type="button" class="btn-close" onclick="dismissNotification({{ notification.id }})" aria-label="Close"></button>
+        </div>
+        <div class="notification-content">
+            <h5 class="notification-title">{{ notification.notification.title }}</h5>
+            <p class="notification-message">{{ notification.notification.message }}</p>
+            <small class="notification-date">{{ notification.notification.created_at|date:"M d, Y" }}</small>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+.notification-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    width: 100%;
+    max-width: 600px;
+    pointer-events: none;
+}
+
+.notification-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-left: 4px solid #007bff;
+    transition: all 0.3s ease;
+    animation: slideIn 0.3s ease-out;
+    margin-bottom: 15px;
+    pointer-events: auto;
+    backdrop-filter: blur(5px);
+}
+
+.notification-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.notification-content {
+    padding: 10px 0;
+    text-align: center;
+}
+
+.notification-title {
+    font-size: 1.4rem;
+    margin: 10px 0;
+    color: #333;
+    font-weight: 600;
+}
+
+.notification-message {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.notification-date {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.notification-card.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .notification-overlay {
+        padding: 0 20px;
+    }
+    
+    .notification-card {
+        margin-bottom: 10px;
+    }
+    
+    .notification-title {
+        font-size: 1.2rem;
+    }
+    
+    .notification-message {
+        font-size: 1rem;
+    }
+}
+</style>
+
+<script>
+function dismissNotification(notificationId) {
+    const notificationCard = document.getElementById(`notification-${notificationId}`);
+    notificationCard.classList.add('fade-out');
+    
+    // Make AJAX call to mark notification as read
+    fetch(`/notifications/mark-read/${notificationId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    }).then(response => {
+        if (response.ok) {
+            setTimeout(() => {
+                notificationCard.remove();
+            }, 300);
+        }
+    });
+}
+</script>
+{% endif %} 
